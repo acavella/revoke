@@ -7,7 +7,6 @@
 
 <!-- PROJECT SHIELDS -->
 <p align="center">
-  <a href="https://styleci.io/repos/26730195/"><img src="https://styleci.io/repos/26730195/shield" alt="StyleCI"></a>
   <a href="https://github.com/tonycavella/revoke/"><img src="https://img.shields.io/badge/build-passing-brightgreen.svg?style=flat-square" alt="Build Status"></a>
   <img src="https://img.shields.io/github/contributors/tonycavella/revoke.svg?style=flat-square" alt="Contributors">
   <a href="LICENSE"><img src="https://img.shields.io/github/license/tonycavella/revoke.svg?style=flat-square" alt="License"></a>
