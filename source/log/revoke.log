@@ -1,0 +1,41 @@
+[2018-06-22 22:03:39] [info] (0) REVOKE/1.0 starting normal
+[2018-06-22 22:03:39] [error] (64) validation URL unreachable, https://www.google.com/
+[2018-06-22 22:04:29] [info] (0) REVOKE/1.0 starting normal
+[2018-06-22 22:05:02] [info] (0) REVOKE/1.0 starting normal
+[2018-06-22 22:05:02] [error] (64) validation URL unreachable, https://www.google.com/dkdkdk.html
+[2018-06-23 00:03:35] [info] (00) REVOKE/0.4.0 started normal
+[2018-06-23 00:03:35] [info] (00) Configuration file loaded sucessfully, /home/acavella/revoke/conf/revoke.conf
+[2018-06-23 00:03:35] [error] (64) validation URL unreachable, https://www.google.com/dkdkdk.html
+[2018-06-23 00:17:44] [info] (00) REVOKE/0.4.0 started normal
+[2018-06-23 00:17:44] [info] (00) Configuration file loaded sucessfully, /home/acavella/revoke/conf/revoke.conf
+[2018-06-23 00:17:45] [info] (00) validation URL successful, https://www.google.com/
+[2018-06-23 00:23:40] [info] (00) REVOKE/0.4.0 started normal
+[2018-06-23 00:23:40] [info] (00) Configuration file loaded sucessfully, /home/acavella/revoke/conf/revoke.conf
+[2018-06-23 00:23:41] [info] (00) validation URL successful, https://www.google.com/
+[2018-06-23 00:23:41] [info] (00) successfully retrieved, http://crl.root-x1.letsencrypt.org
+[2018-06-23 00:23:41] [info] (00) successfully retrieved, http://crl.root-x1.letsencrypt.org
+[2018-06-23 01:00:35] [info] (00) REVOKE/0.4.0 started normal
+[2018-06-23 01:00:35] [info] (00) Configuration file loaded sucessfully, /home/acavella/revoke/conf/revoke.conf
+[2018-06-23 01:00:35] [info] (00) validation URL successful, https://www.google.com/
+[2018-06-23 01:00:35] [info] (00) crl download sucessful, http://crl.root-x1.letsencrypt.org
+[2018-06-23 01:00:35] [info] (00) crl download sucessful, http://crl.root-x1.letsencrypt.org
+[2018-06-24 15:54:49] [info] (00) REVOKE/0.4.0 started normal
+[2018-06-24 15:54:49] [info] (00) Configuration file loaded sucessfully, /home/acavella/revoke/conf/revoke.conf
+[2018-06-24 15:54:50] [info] (00) validation URL successful, https://www.google.com/
+[2018-06-24 15:54:50] [info] (00) crl download sucessful, http://crl.root-x1.letsencrypt.org
+[2018-06-24 15:54:50] [info] (00) crl download sucessful, http://crl.root-x1.letsencrypt.org
+[2018-06-24 15:57:06] [info] (00) REVOKE/0.4.0 started normal
+[2018-06-24 15:57:06] [info] (00) Configuration file loaded sucessfully, /home/acavella/revoke/conf/revoke.conf
+[2018-06-24 15:57:06] [info] (00) validation URL successful, https://www.google.com/
+[2018-06-24 15:57:06] [info] (00) crl download sucessful, http://crl.root-x1.letsencrypt.org
+[2018-06-24 15:57:06] [info] (00) crl download sucessful, http://crl.root-x1.letsencrypt.org
+[2018-06-24 16:01:10] [info] (00) REVOKE/0.4.0 started normal
+[2018-06-24 16:01:10] [info] (00) Configuration file loaded sucessfully, /home/acavella/revoke/conf/revoke.conf
+[2018-06-24 16:01:10] [info] (00) validation URL successful, https://www.google.com/
+[2018-06-24 16:01:10] [info] (00) crl download sucessful, http://crl.root-x1.letsencrypt.org
+[2018-06-24 16:01:10] [info] (00) crl download sucessful, http://crl.root-x1.letsencrypt.org
+[2018-06-24 16:02:38] [info] (00) REVOKE/0.4.0 started normal
+[2018-06-24 16:02:38] [info] (00) Configuration file loaded sucessfully, /home/acavella/revoke/conf/revoke.conf
+[2018-06-24 16:02:39] [info] (00) validation URL successful, https://www.google.com/
+[2018-06-24 16:02:39] [info] (00) crl download sucessful, http://crl.root-x1.letsencrypt.org
+[2018-06-24 16:02:39] [info] (00) crl download sucessful, http://crl.root-x1.letsencrypt.org
