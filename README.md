@@ -1,7 +1,8 @@
 <!-- PROJECT SHIELDS -->
 [![Build Status][build-shield]]()
 [![Contributors][contributors-shield]]()
-[![MIT License][license-shield]][license-url]
+[![GPL3 License][license-shield]][license-url]
+[![SemanticVersion][semver-sheild]]()
 [![LinkedIn][linkedin-shield]][linkedin-url]
 
 
@@ -128,7 +129,7 @@ Contributions are what make the open source community such an amazing place to b
 <!-- LICENSE -->
 ## License
 
-Distributed under the MIT License. See `LICENSE` for more information.
+Distributed under the GNU General Public License v3.0. See `LICENSE` for more information.
 
 
 
@@ -164,6 +165,8 @@ Project Link: [https://github.com/tonycavella/revoke](https://github.com/tonycav
 [contributors-shield]: https://img.shields.io/badge/contributors-1-orange.svg?style=flat-square
 [license-shield]: https://img.shields.io/github/license/tonycavella/revoke.svg?style=flat-square
 [license-url]: https://choosealicense.com/licenses/gpl-3.0/
+[semver-shield]: https://img.shields.io/github/tag/tonycavella/revoke.svg?style=flat-square
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=flat-square&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/anthonycavella
+[linkedin-url]: https://linkedin.com/in/cavella/
+
 [product-screenshot]: https://raw.githubusercontent.com/othneildrew/Best-README-Template/master/screenshot.png
