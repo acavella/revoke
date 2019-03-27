@@ -1,11 +1,18 @@
+<!-- PROJECT LOGO -->
+<p align="center">
+  <a href="https://github.com/tonycavella/revoke">
+    <img src="logo.png" alt="Logo" width="80" height="80">
+  </a>
+</p>
+
 <!-- PROJECT SHIELDS -->
-
-![Semantic Version][semver-shield]
-![Build Status][build-shield]
-![Contributors][contributors-shield]
-![GPL3 License][license-shield]
-![LinkedIn][linkedin-shield]
-
+<p align="center">
+  <a href="https://styleci.io/repos/26730195/"><img src="https://styleci.io/repos/26730195/shield" alt="StyleCI"></a>
+  <a href="https://github.com/tonycavella/revoke/"><img src="https://img.shields.io/badge/build-passing-brightgreen.svg?style=flat-square" alt="Build Status"></a>
+  <img src="https://img.shields.io/github/contributors/tonycavella/revoke.svg?style=flat-square" alt="Contributors">
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/tonycavella/revoke.svg?style=flat-square" alt="License"></a>
+  <a href="https://github.com/tonycavella/revoke/releases"><img src="https://img.shields.io/github/release/tonycavella/revoke.svg?style=flat-square" alt="Latest Stable Version"></a>
+</p>
 
 <!-- PROJECT LOGO -->
 <br />
