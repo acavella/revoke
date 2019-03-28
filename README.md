@@ -15,57 +15,29 @@
 
 ## Overview
 
-- List your service components
-- Report incidents
-- Customise the look of your status page
-- Markdown support for incident messages
-- A powerful JSON API
-- Metrics
-- Multi-lingual
-- Subscriber notifications via email
-- Two factor authentication
+Automates the download and hosting of CRL data from a remote Certificate Authority.  Revoke is designed to be executed via chron.  
 
-
-
-## Community
-
-You can now [join our Slack community!](http://cachethq-slack.herokuapp.com)
+- Retrieve remote CRL data via HTTP or HTTPS
+- Validates remote CRL data
+- Serves CRLs via local HTTPD
+- Written using BASH to maximize native compatibility and remain lighweight
+- Retrieve an unlimited number of CRLs
+- Support for full and delta CRLs
 
 ## Requirements
+- Bash
+- Apache HTTP Server 2.4 
+- OpenSSL 1.0.2 or later
+- Curl 7.29 or later
 
-- PHP 7.1 or later
-- HTTP server with PHP support (eg: Apache, Nginx, Caddy)
-- [Composer](https://getcomposer.org)
-- A supported database: MySQL, PostgreSQL or SQLite
+## Installation
 
-## Installation, Upgrades and Documentation
-
-You can find documentation at [https://docs.cachethq.io](https://docs.cachethq.io).
-
-Here are some useful quick links:
-
-- [Installing Cachet](https://docs.cachethq.io/docs/installing-cachet)
-- [Getting started with Docker](https://docs.cachethq.io/docs/get-started-with-docker)
-- [Installing Cachet on Windows](https://docs.cachethq.io/docs/installing-cachet-on-windows)
-
-### Demo
-
-To test out the demo, you may login to the [Dashboard](https://dev.cachethq.io/dashboard) with the following:
-
-- **Username:** `test` or `test@example.com`
-- **Password:** `test123`
-
-> The demo resets every 30 minutes.
-
-## Translate Cachet
-
-If you'd like to contribute translations, please check out our [CrowdIn project](https://crowdin.com/project/cachet).
+Installation instructions here.
 
 ## Security Vulnerabilities
 
-If you discover a security vulnerability within Cachet, please send an e-mail to [support@cachethq.io](mailto:support@cachethq.io?Cachet%20Security%20Vulnerability). All security vulnerabilities on a case-by-case basis.
+If you discover a security vulnerability within Revoke, please send an e-mail to [tony@cavella.com](mailto:tony@cavella.com?Revoke%20Security%20Vulnerability). All security vulnerabilities on a case-by-case basis.
 
-<!-- CONTRIBUTING -->
 ## Contributing
 
 Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
@@ -76,12 +48,10 @@ Contributions are what make the open source community such an amazing place to b
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-<!-- LICENSE -->
 ## License
 
 Distributed under the GNU General Public License v3.0. See `LICENSE` for more information.
 
-<!-- CONTACT -->
 ## Contact
 
 Tony Cavella - tony@cavella.com
