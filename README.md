@@ -85,6 +85,7 @@ Distributed under the GNU General Public License v3.0. See `LICENSE` for more in
 ## Contact
 
 Tony Cavella - tony@cavella.com
+
 Project Link: [https://github.com/tonycavella/revoke](https://github.com/tonycavella/revoke)
 
 <!-- ACKNOWLEDGEMENTS -->
