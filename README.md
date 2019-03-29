@@ -65,3 +65,4 @@ Project Link: [https://github.com/tonycavella/revoke](https://github.com/tonycav
 * [Choose an Open Source License](https://choosealicense.com) - Project `LICENSE`
 * [GitHub Pages](https://pages.github.com)
 * [Markdown Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) - Adam Pritchard's markdown cheatsheet.
+* [Semantic Version](https://semver.org) - Semantic Versioning Specification v2.0.0
