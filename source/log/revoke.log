@@ -39,3 +39,8 @@
 [2018-06-24 16:02:39] [info] (00) validation URL successful, https://www.google.com/
 [2018-06-24 16:02:39] [info] (00) crl download sucessful, http://crl.root-x1.letsencrypt.org
 [2018-06-24 16:02:39] [info] (00) crl download sucessful, http://crl.root-x1.letsencrypt.org
+[2019-03-29 00:22:29] [info] (00) revoke v0.1.0-alpha started normal
+[2019-03-29 00:22:29] [info] (00) Configuration file loaded sucessfully, /home/acavella/repo/revoke/source/conf/revoke.conf
+[2019-03-29 00:22:29] [info] (00) validation URL successful, https://www.google.com/
+[2019-03-29 00:22:29] [info] (00) crl download sucessful, http://crl.root-x1.letsencrypt.org
+[2019-03-29 00:22:29] [info] (00) crl download sucessful, http://crl.root-x1.letsencrypt.org
