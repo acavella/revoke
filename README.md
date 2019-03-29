@@ -60,7 +60,7 @@ Project Link: [https://github.com/tonycavella/revoke](https://github.com/tonycav
 
 <!-- ACKNOWLEDGEMENTS -->
 ## Acknowledgements
-* [Google](https://www.flaticon.com/authors/google) - Logo icon
+* [Google](https://www.flaticon.com/authors/google) - TickInCircle icon used in logo.
 * [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
 * [Img Shields](https://shields.io)
 * [Choose an Open Source License](https://choosealicense.com)
