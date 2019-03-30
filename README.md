@@ -36,7 +36,7 @@ Installation instructions here.
 
 ## Security Vulnerabilities
 
-If you discover a security vulnerability within Revoke, please send an e-mail to [tony@cavella.com](mailto:tony@cavella.com?Revoke%20Security%20Vulnerability). All security vulnerabilities on a case-by-case basis.
+If you discover a security vulnerability within revoke, please send an e-mail to [tony@cavella.com](mailto:tony@cavella.com?Revoke%20Security%20Vulnerability). Security vulnerabilities are taken very seriously and will be addressed with the utmost priority.
 
 ## Contributing
 
