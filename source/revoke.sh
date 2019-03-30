@@ -15,13 +15,13 @@ logFile="/var/log/revoke.log"
 counterA=0
 timeDate=$(date '+%Y-%m-%d %H:%M:%S')
 fileDTG=$(date '+%Y%m%d-%H%M%S')
-
+defGW=$(ip route show default | awk '/default/ {print $3}')
 
 # SCRIPT STARTUP
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] (00) revoke v$scriptVersion started" >> $logFile
 
 
-# CHECK AND LOAD EXTERNAL CONFIG
+## CHECK AND LOAD EXTERNAL CONFIG
 if [ ! -e $confFile ]
 then
   echo "[$(date '+%Y-%m-%d %H:%M:%S')] [error] (64) Configuration file missing, please run setup.sh" >> $logFile
@@ -32,12 +32,14 @@ else
 fi
 
 
-# CHECK FOR VALID CONNECTION
-if  curl -f -k $validationURL >/dev/null 2>&1; 
+## CHECK FOR NETWORK CONNECTIVTY
+ping -c 1 $defGW >/dev/null 2>&1;
+pingExit=$?
+if [ $pingExit -eq 0 ]
 then
-  echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] (00) validation URL successful, $validationURL" >> $logFile
+   echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] (00) Default gateway available, $defGW" >> $logFile
 else
-  echo "[$(date '+%Y-%m-%d %H:%M:%S')] [error] (64) validation URL unreachable, $validationURL" >> $logFile
+  echo "[$(date '+%Y-%m-%d %H:%M:%S')] [error] (64) Default gateway is unreachable, $defGW" >> $logFile
   exit 64
 fi
 
