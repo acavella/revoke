@@ -36,7 +36,7 @@ Installation instructions here.
 
 ## Security Vulnerabilities
 
-If you discover a security vulnerability within Revoke, please send an e-mail to [tony@cavella.com](mailto:tony@cavella.com?Revoke%20Security%20Vulnerability). All security vulnerabilities on a case-by-case basis.
+If you discover a security vulnerability within revoke, please send an e-mail to [tony@cavella.com](mailto:tony@cavella.com?Revoke%20Security%20Vulnerability). Security vulnerabilities are taken very seriously and will be addressed with the utmost priority.
 
 ## Contributing
 
@@ -60,15 +60,9 @@ Project Link: [https://github.com/tonycavella/revoke](https://github.com/tonycav
 
 <!-- ACKNOWLEDGEMENTS -->
 ## Acknowledgements
-* Icon used in logo made by [Google](https://www.flaticon.com/authors/google) from [www.flaticon.com](https://www.flaticon.com) 
-* [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
-* [Img Shields](https://shields.io)
-* [Choose an Open Source License](https://choosealicense.com)
+* [Google](https://www.flaticon.com/authors/google) - TickInCircle icon used in logo.
+* [Img Shields](https://shields.io) - Shields used in `README`
+* [Choose an Open Source License](https://choosealicense.com) - Project `LICENSE`
 * [GitHub Pages](https://pages.github.com)
-* [Animate.css](https://daneden.github.io/animate.css)
-* [Loaders.css](https://connoratherton.com/loaders)
-* [Slick Carousel](https://kenwheeler.github.io/slick)
-* [Smooth Scroll](https://github.com/cferdinandi/smooth-scroll)
-* [Sticky Kit](http://leafo.net/sticky-kit)
-* [JVectorMap](http://jvectormap.com)
-* [Font Awesome](https://fontawesome.com)
+* [Markdown Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) - Adam Pritchard's markdown cheatsheet.
+* [Semantic Version](https://semver.org) - Semantic Versioning Specification v2.0.0
