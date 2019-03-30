@@ -3,8 +3,8 @@
 # NAME: revoke.sh
 # DECRIPTION: Perform downloads of remote CRL data and host them locally via HTTPD.
 # AUTHOR: Tony Cavella (tony@cavella.com)
-# VERSION: 1.0
-# UPDATED: 2018-06-21
+# VERSION: 0.1.0-alpha
+# UPDATED: 2019-03-30
 
 # SCRIPT VARIABLES
 scriptName=$0
