@@ -4,7 +4,7 @@
 # DECRIPTION: Perform downloads of remote CRL data and host them locally via HTTPD.
 # AUTHOR: Tony Cavella (tony@cavella.com)
 # VERSION: 0.1.0-alpha
-# UPDATED: 2019-03-30
+# UPDATED: 2019-03-31
 
 # SCRIPT VARIABLES
 scriptName=$0
