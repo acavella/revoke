@@ -11,4 +11,4 @@
 .nfs*
 
 # Test script
-/source/test.sh
+/test/test.sh
