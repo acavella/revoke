@@ -50,18 +50,11 @@ do
   if [ ! -e $downloadDIR${crlName[$counterA]} ]
   then
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] [error] (64) crl download failed, $i" >> $logFile
-    exit 64
   else 
-  echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] (00) crl download sucessful, $i" >> $logFile
-  fi
-  openssl crl -inform DER -text -noout -in $downloadDIR${crlName[$counterA]} | grep 'Certificate Revocation List' &> /dev/null
-  if [ $? == 0 ]; then
-    echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] (00) crl $crlName[$counterA] format valid, copying" >> $logFile
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] (00) crl download sucessful, $i" >> $logFile
     mv $downloadDIR${crlName[$counterA]} $publicWWW
-  else
-  echo "[$(date '+%Y-%m-%d %H:%M:%S')] [error] (64) crl $crlName[$counterA] format invalid, skipping" >> $logFile
   fi
-  let counterA=counterA+1
+let counterA=counterA+1
 done
 
 
