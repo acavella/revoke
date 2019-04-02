@@ -3,12 +3,11 @@
 # NAME: revoke.sh
 # DECRIPTION: Perform downloads of remote CRL data and host them locally via HTTPD.
 # AUTHOR: Tony Cavella (tony@cavella.com)
-# VERSION: 0.2.0-alpha
-# UPDATED: 2019-03-30
+# GITHUB: https://github.com/tonycavella/revoke
 
 # SCRIPT VARIABLES
 scriptName=$0
-scriptVersion="0.2.0-alpha"
+scriptVersion="1.0.0"
 baseDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 confFile="$baseDIR""/conf/revoke.conf"
 logFile="/var/log/revoke.log"
@@ -66,9 +65,4 @@ do
 done
 
 
-# MOVE CRL(s) FROM /TMP TO PUBLIC HTML DIRECTORY
-#for i in "${crlName[@]}"
-#do
-#  mv $downloadDIR$i $publicWWW
-#done
 exit 0
