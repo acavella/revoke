@@ -1,8 +1,7 @@
-remote_theme: /agusmakmun/agusmakmun.github.io
-title: Stack Problems
+title: Tony Cavella
 description: revoke
 author: Tony Cavella
-github: https://github.com/tonycavella
+github: https://github.com/tonycavella/revoke
 about: I'm Programmer for Python & Django. I've made quite a few web apps, especially on Django.
 disqus_shortname: stackproblems
 google_analytics: UA-XXXXXXXX-Y
@@ -14,7 +13,7 @@ tagarray: []
 collections:
   project:
     output: true
-    permalink: /tonycavella/revoke/
+    permalink: https://github.com/tonycavella/revoke/
 
 social:
     - icon: fa-facebook
