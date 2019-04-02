@@ -7,7 +7,7 @@
 
 # SCRIPT VARIABLES
 scriptName=$0
-scriptVersion="1.0.0"
+scriptVersion="1.0.1"
 baseDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 confFile="$baseDIR""/conf/revoke.conf"
 logFile="/var/log/revoke.log"
