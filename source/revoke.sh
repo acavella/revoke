@@ -55,13 +55,20 @@ do
   else 
   echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] (00) crl download sucessful, $i" >> $logFile
   fi
+  openssl crl -inform DER -text -noout -in $downloadDIR${crlName[$counterA]} | grep 'Certificate Revocation List' &> /dev/null
+  if [ $? == 0 ]; then
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] (00) crl $crlName[$counterA] format valid, copying" >> $logFile
+    mv $downloadDIR${crlName[$counterA]} $publicWWW
+  else
+  echo "[$(date '+%Y-%m-%d %H:%M:%S')] [error] (64) crl $crlName[$counterA] format invalid, skipping" >> $logFile
+  fi
   let counterA=counterA+1
 done
 
 
 # MOVE CRL(s) FROM /TMP TO PUBLIC HTML DIRECTORY
-for i in "${crlName[@]}"
-do
-  mv $downloadDIR$i $publicWWW
-done
+#for i in "${crlName[@]}"
+#do
+#  mv $downloadDIR$i $publicWWW
+#done
 exit 0
