@@ -1,3 +1,4 @@
+remote-theme: agusmakmun/agusmakmun.github.io
 title: Stack Problems
 description: My Personal Stack Problems
 author: Agus Makmun
@@ -45,7 +46,6 @@ paginate: 20
 per_page: 20
 paginate_path: "/page/:num/"
 markdown: kramdown
-remote-theme: agusmakmun/agusmakmun.github.io
 gems:
   - jekyll-paginate
   - jekyll-gist
