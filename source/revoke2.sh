@@ -18,13 +18,15 @@ __root="$(cd "$(dirname "${__dir}")" && pwd)" # <-- change this as it depends on
 arg1="${1:-}"
 log="/var/log/revoke.log"
 ver=`cat ${__dir}/conf/VERSION.md`
+dtg=`date '+%Y-%m-%d %H:%M:%S'`
+file_dtg=`date '+%Y-%m-%d_%H:%M:%S'`
 
 ## GENERAL SCRIPT FUNCTIONS
 
 # Output help text
 if [ "${arg1}" == "--help" ]
 then
-  printf -- "Help is just a click away...\n"
+  printf "Help is just a click away...\n"
 fi
 
 # Output version string
@@ -33,7 +35,8 @@ then
   printf "Version: revoke/${ver}\n"
 fi
 
-
+printf "${dtg}\n"
+printf "${file_dtg}\n"
 
 exit 0
 ## OLD SCRIPT BELOW 
