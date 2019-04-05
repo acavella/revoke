@@ -1,42 +1,50 @@
 #!/usr/bin/env bash
 
-# NAME: revoke.sh
-# DECRIPTION: Perform downloads of remote CRL data and host them locally via HTTPD.
-# AUTHOR: Tony Cavella (tony@cavella.com)
-# GITHUB: https://github.com/tonycavella/revoke
+## script/revoke.sh
+## Automates the download and hosting of CRL data from a remote Certificate Authority.
+## Tony Cavella (tony@cavella.com)
+## https://github.com/tonycavella/revoke
 
+## CONFIGURE DEFAULT ENVIRONMENT
 set -o errexit
 set -o pipefail
 set -o nounset
-# set -o xtrace
+#set -o xtrace #debugging
 
 __dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 __file="${__dir}/$(basename "${BASH_SOURCE[0]}")"
 __base="$(basename ${__file} .sh)"
-__root="$(cd "$(dirname "${__dir}")" && pwd)" # <-- change this as it depends on your app
+__root="$(cd "$(dirname "${__dir}")" && pwd)"
 
+
+## GLOBAL VARIABLES
 arg1="${1:-}"
+arg2="${2:-}"
 log="/var/log/revoke.log"
-ver=`cat ${__dir}/conf/VERSION.md`
+ver=`cat ${__dir}/VERSION`
 dtg=`date '+%Y-%m-%d %H:%M:%S'`
 file_dtg=`date '+%Y-%m-%d_%H:%M:%S'`
 
-## GENERAL SCRIPT FUNCTIONS
 
-# Output help text
+## GENERAL SCRIPT FUNCTIONS
 if [ "${arg1}" == "--help" ]
 then
-  printf "Help is just a click away...\n"
+  source ${__dir}/bin/printhelp.sh
 fi
 
-# Output version string
 if [ "${arg1}" == "--version" ]
 then
-  printf "Version: revoke/${ver}\n"
+  printf "revoke/${ver}\n"
 fi
 
-printf "${dtg}\n"
-printf "${file_dtg}\n"
+if [ "${arg1}" == "--status" ]
+then
+  printf "Print configuration status\n"    
+fi
+
+## LOAD FUNCTIONS
+#source
+
 
 exit 0
 ## OLD SCRIPT BELOW 
