@@ -26,10 +26,13 @@ dtg=`date '+%Y-%m-%d %H:%M:%S'`
 file_dtg=`date '+%Y-%m-%d_%H:%M:%S'`
 
 
+## LOAD FUNCTIONS
+source ${__dir}/bin/revoke_help.sh
+
 ## GENERAL SCRIPT FUNCTIONS
 if [ "${arg1}" == "--help" ]
 then
-  source ${__dir}/bin/printhelp.sh
+  print_help
 fi
 
 if [ "${arg1}" == "--version" ]
