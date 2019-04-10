@@ -24,10 +24,12 @@ log="/var/log/revoke.log"
 ver=`cat ${__dir}/VERSION`
 dtg=`date '+%Y-%m-%d %H:%M:%S'`
 file_dtg=`date '+%Y-%m-%d_%H:%M:%S'`
-
+confFile=${__dir}/conf/revoke.conf
 
 ## LOAD FUNCTIONS
 source ${__dir}/bin/revoke_help.sh
+source ${__dir}/bin/revoke_status.sh
+
 
 ## GENERAL SCRIPT FUNCTIONS
 if [ "${arg1}" == "--help" ]
@@ -42,7 +44,7 @@ fi
 
 if [ "${arg1}" == "--status" ]
 then
-  printf "Print configuration status\n"    
+  print_status
 fi
 
 ## LOAD FUNCTIONS
