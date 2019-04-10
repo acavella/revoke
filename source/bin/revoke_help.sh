@@ -1,4 +1,4 @@
-print_help () {
+print_help() {
 printf "
 Usage: revoke [OPTION]
 Download and host CRL information from remote Certificate Authority.
@@ -7,6 +7,7 @@ Download and host CRL information from remote Certificate Authority.
    --help                     this help text
    --version                  prints version information
    --status                   prints configuration information
+   --config                   performs initial script configuration
    --install-cron             installs script into cron
 
  Exit status:

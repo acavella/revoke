@@ -24,7 +24,11 @@ log="/var/log/revoke.log"
 ver=`cat ${__dir}/VERSION`
 dtg=`date '+%Y-%m-%d %H:%M:%S'`
 file_dtg=`date '+%Y-%m-%d_%H:%M:%S'`
+
+
+## LOAD CONFIGURATION
 confFile=${__dir}/conf/revoke.conf
+
 
 ## LOAD FUNCTIONS
 source ${__dir}/bin/revoke_help.sh
