@@ -12,3 +12,7 @@
 
 # Script used to test random scraps of code
 /test/test.sh
+
+# GitHub Probot configurations
+/.github/config.yml
+/.github/weekly-digest.yml
