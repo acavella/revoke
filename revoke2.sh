@@ -23,7 +23,7 @@ arg2="${2:-}"
 log="/var/log/revoke.log"
 ver=`cat ${__dir}/VERSION`
 dtg=`date '+%Y-%m-%d %H:%M:%S'`
-file_dtg=`date '+%Y-%m-%d_%H:%M:%S'`
+dtgFile=`date '+%Y%m%d_%H%M%S'`
 
 
 ## LOAD CONFIGURATION
@@ -35,7 +35,7 @@ source ${__dir}/bin/revoke_help.sh
 source ${__dir}/bin/revoke_status.sh
 
 
-## GENERAL SCRIPT FUNCTIONS
+## GENERAL FUNCTIONS
 if [ "${arg1}" == "--help" ]
 then
   print_help
@@ -51,8 +51,9 @@ then
   print_status
 fi
 
-## LOAD FUNCTIONS
-#source
+
+## MAIN FUNCTIONS
+
 
 
 exit 0
