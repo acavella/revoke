@@ -1,1 +1,1 @@
-We are working on updating our documentation, check back soon.
+This directory includes scripts related to the development of an scripted installation system.
