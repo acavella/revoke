@@ -1,10 +1,63 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-# NAME: revoke.sh
-# DECRIPTION: Perform downloads of remote CRL data and host them locally via HTTPD.
-# AUTHOR: Tony Cavella (tony@cavella.com)
-# GITHUB: https://github.com/tonycavella/revoke
+## script/revoke.sh
+## Automates the download and hosting of CRL data from a remote Certificate Authority.
+## Tony Cavella (tony@cavella.com)
+## https://github.com/tonycavella/revoke
 
+## CONFIGURE DEFAULT ENVIRONMENT
+set -o errexit
+set -o pipefail
+set -o nounset
+#set -o xtrace #debugging
+
+__dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+__file="${__dir}/$(basename "${BASH_SOURCE[0]}")"
+__base="$(basename ${__file} .sh)"
+__root="$(cd "$(dirname "${__dir}")" && pwd)"
+
+
+## GLOBAL VARIABLES
+arg1="${1:-}"
+arg2="${2:-}"
+log="/var/log/revoke.log"
+ver=`cat ${__dir}/VERSION`
+dtg=`date '+%Y-%m-%d %H:%M:%S'`
+dtgFile=`date '+%Y%m%d_%H%M%S'`
+
+
+## LOAD CONFIGURATION
+confFile=${__dir}/conf/revoke.conf
+
+
+## LOAD FUNCTIONS
+source ${__dir}/bin/revoke_help.sh
+source ${__dir}/bin/revoke_status.sh
+
+
+## GENERAL FUNCTIONS
+if [ "${arg1}" == "--help" ]
+then
+  print_help
+fi
+
+if [ "${arg1}" == "--version" ]
+then
+  printf "revoke/${ver}\n"
+fi
+
+if [ "${arg1}" == "--status" ]
+then
+  print_status
+fi
+
+
+## MAIN FUNCTIONS
+
+
+
+exit 0
+## OLD SCRIPT BELOW 
 # SCRIPT VARIABLES
 scriptName=$0
 scriptVersion="1.0.1"
@@ -14,7 +67,7 @@ logFile="/var/log/revoke.log"
 counterA=0
 timeDate=$(date '+%Y-%m-%d %H:%M:%S')
 fileDTG=$(date '+%Y%m%d-%H%M%S')
-defGW=$(ip route show default | awk '/default/ {print $3}')
+#defGW=$(ip route show default | awk '/default/ {print $3}')
 
 # SCRIPT STARTUP
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] (00) revoke v$scriptVersion started" >> $logFile
@@ -30,17 +83,7 @@ else
   echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] (00) Configuration file loaded sucessfully, $confFile" >> $logFile
 fi
 
-
-## CHECK FOR NETWORK CONNECTIVTY
-ping -c 1 $defGW >/dev/null 2>&1;
-pingExit=$?
-if [ $pingExit -eq 0 ]
-then
-   echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] (00) Default gateway available, $defGW" >> $logFile
-else
-  echo "[$(date '+%Y-%m-%d %H:%M:%S')] [error] (64) Default gateway is unreachable, $defGW" >> $logFile
-  exit 64
-fi
+source bin/netcheck.sh
 
 
 # DOWNLOAD CRL(s)
