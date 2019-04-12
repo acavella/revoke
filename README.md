@@ -1,7 +1,7 @@
 <!-- PROJECT LOGO -->
 <p align="center">
   <a href="https://github.com/tonycavella/revoke">
-    <img src="logo.png" alt="Logo">
+    <img src="images/logo.png" alt="Logo">
   </a>
 </p>
 
