@@ -25,7 +25,8 @@ dtg=`date '+%Y-%m-%d %H:%M:%S'`
 dtgFile=`date '+%Y%m%d_%H%M%S'`
 buildDir=${__dir}/periodic
 sourceDir=/home/acavella/repo/revoke/
-buildFilename=revoke-${dtgFile}.tar.gz
+buildName=revoke-${dtgFile}
+tmpBuild=/tmp/${buildName}
 
 
 ## LOAD CONFIGURATION
@@ -55,9 +56,18 @@ fi
 
 
 ## MAIN FUNCTIONS
-tar -czvf ${buildDir}/${buildFilename} ${sourceDir} --exclude "/home/acavella/repo/revoke/builds"
+mkdir ${tmpBuild}
 
-#build_nightly
+rsync -av --progress ${sourceDir} ${tmpBuild} --exclude build --exclude .github --exclude install --exclude .gitignore --exclude .git
+
+tar -C /tmp  -czvf ${buildDir}/${buildName}.tar.gz ${buildName}
+
+rm -rf ${tmpBuild}
+
+## UPDATE GITHUB
+git add ${buildDir}/${buildName}.tar.gz
+git commit -a -m "Added build ${buildName}"
+git push
 
 
 exit 0
