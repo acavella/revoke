@@ -12,6 +12,8 @@ set -o nounset
 #set -o xtrace #debugging
 
 __dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+__bin="${__dir}/bin"
+__conf="${__dir}/conf"
 __file="${__dir}/$(basename "${BASH_SOURCE[0]}")"
 __base="$(basename ${__file} .sh)"
 __root="$(cd "$(dirname "${__dir}")" && pwd)"
@@ -27,12 +29,17 @@ dtgFile=`date '+%Y%m%d_%H%M%S'`
 
 
 ## LOAD CONFIGURATION
-confFile=${__dir}/conf/revoke.conf
+confFile=${__conf}/revoke.conf
 
 
 ## LOAD FUNCTIONS
-source ${__dir}/bin/revoke_help.sh
-source ${__dir}/bin/revoke_status.sh
+source ${__bin}/revoke_verify.sh
+source ${__bin}/revoke_help.sh
+source ${__bin}/revoke_status.sh
+
+
+## PERFORM VALIDATION
+verify_module
 
 
 ## GENERAL FUNCTIONS
