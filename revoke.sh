@@ -36,7 +36,7 @@ confFile=${__conf}/revoke.conf
 source ${__bin}/revoke_verify.sh
 source ${__bin}/revoke_help.sh
 source ${__bin}/revoke_status.sh
-
+source ${__bin}/revoke_config.sh
 
 ## PERFORM VALIDATION
 verify_module
@@ -56,6 +56,11 @@ fi
 if [ "${arg1}" == "--status" ]
 then
   print_status
+fi
+
+if [ "${arg1}" == "--config" ]
+then
+  init_config
 fi
 
 
