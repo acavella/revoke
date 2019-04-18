@@ -1,14 +1,39 @@
 init_config() {
 
-confCOUNT=1
+countA=2
 
-printf "Please enter the URL of the CRL: "
-read crlURL[1] 
+echo "# This file is auto-generated." > ${__conf}/revoke.conf
+echo "# User changes will be destroyed the next time revoke --config is run." >> ${__conf}/revoke.conf
 
-printf "Please enter a name for this file: "
-read crlFN[1]
+printf "URL to download CRL: "
+read urlIN 
 
-echo ${#crlURL[@]}
-echo ${crlURL[1]} > ${__conf}/revoke.conf
-echo ${crlFN[1]} >> ${__conf}/revoke.conf
+printf "Name of saved CRL file: "
+read crlIN
+
+#echo ${#crlURL[@]}
+echo "crlURL[1]=${urlIN}" >> ${__conf}/revoke.conf
+echo "crlFN[1]=${crlIN}" >> ${__conf}/revoke.conf
+
+printf "Do you have another CRL to enter? (y/n): "
+read contIN
+
+while [ ${contIN} = y ]
+do
+  printf "URL to download CRL: "
+  read urlIN
+
+  printf "Name of saved CRL file: "
+  read crlIN
+
+  echo "crlURL[${countA}]=${urlIN}" >> ${__conf}/revoke.conf
+  echo "crlFN[${countA}]=${crlIN}" >> ${__conf}/revoke.conf
+
+  countA=$((countA+1))
+
+  printf "Do you have another CRL to enter? (y/n): "
+  read contIN
+done
+
+
 }
