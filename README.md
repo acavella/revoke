@@ -7,11 +7,13 @@
 
 <!-- PROJECT SHIELDS -->
 <p align="center">
+  
   <a href="https://github.com/tonycavella/revoke/"><img src="https://img.shields.io/badge/build-passing-brightgreen.svg" alt="Build Status"></a>
   <img src="https://img.shields.io/github/contributors/tonycavella/revoke.svg" alt="Contributors">
   <a href="LICENSE"><img src="https://img.shields.io/github/license/tonycavella/revoke.svg" alt="License"></a>
   <a href="https://github.com/tonycavella/revoke/releases"><img src="https://img.shields.io/github/release/tonycavella/revoke.svg" alt="Latest Stable Version"></a>
   <a href="https://bestpractices.coreinfrastructure.org/projects/2731"><img src="https://bestpractices.coreinfrastructure.org/projects/2731/badge"></a>
+  
 </p>
 
 ## Overview
