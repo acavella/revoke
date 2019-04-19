@@ -4,6 +4,7 @@ countA=2
 
 echo "# This file is auto-generated." > ${__conf}/revoke.conf
 echo "# User changes will be destroyed the next time revoke --config is run." >> ${__conf}/revoke.conf
+echo "configStatus=TRUE" >> ${__conf}/revoke.conf
 
 printf "URL to download CRL: "
 read urlIN 

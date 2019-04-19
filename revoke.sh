@@ -30,7 +30,7 @@ dtgFile=`date '+%Y%m%d_%H%M%S'`
 
 ## LOAD CONFIGURATION
 confFile=${__conf}/revoke.conf
-
+source ${confFile}
 
 ## LOAD FUNCTIONS
 source ${__bin}/revoke_verify.sh

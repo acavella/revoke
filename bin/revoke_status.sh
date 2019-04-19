@@ -9,4 +9,9 @@ else
   printf "Valid configuration file found\n"
 fi
 
+if [ ${confStatus} != TRUE ]
+then
+  printf "Please run ./revoke.sh --config"
+fi
+
 }
