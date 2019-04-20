@@ -3,7 +3,7 @@
 ## script/revoke.sh
 ## Automates the download and hosting of CRL data from a remote Certificate Authority.
 ## Tony Cavella (tony@cavella.com)
-## https://github.com/tonycavella/revoke
+## https://github.com/revokehq/revoke
 
 ## CONFIGURE DEFAULT ENVIRONMENT
 set -o errexit
