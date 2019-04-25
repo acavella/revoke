@@ -17,7 +17,7 @@ __conf="${__dir}/conf"
 __file="${__dir}/$(basename "${BASH_SOURCE[0]}")"
 __base="$(basename ${__file} .sh)"
 __root="$(cd "$(dirname "${__dir}")" && pwd)"
-
+__crl="${__dir}/crl"
 
 ## GLOBAL VARIABLES
 arg1="${1:-}"
