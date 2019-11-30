@@ -1,75 +1,10 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
-## script/revoke.sh
-## Automates the download and hosting of CRL data from a remote Certificate Authority.
-## Tony Cavella (tony@cavella.com)
-## https://github.com/revokehq/revoke
+# NAME: revoke.sh
+# DECRIPTION: Perform downloads of remote CRL data and host them locally via HTTPD.
+# AUTHOR: Tony Cavella (tony@cavella.com)
+# GITHUB: https://github.com/tonycavella/revoke
 
-## CONFIGURE DEFAULT ENVIRONMENT
-set -o errexit
-set -o pipefail
-set -o nounset
-#set -o xtrace #debugging
-
-__dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-__bin="${__dir}/bin"
-__conf="${__dir}/conf"
-__file="${__dir}/$(basename "${BASH_SOURCE[0]}")"
-__base="$(basename ${__file} .sh)"
-__root="$(cd "$(dirname "${__dir}")" && pwd)"
-__crl="${__dir}/crl"
-
-## GLOBAL VARIABLES
-arg1="${1:-}"
-arg2="${2:-}"
-log="/var/log/revoke.log"
-ver=`cat ${__dir}/VERSION`
-dtg=`date '+%Y-%m-%d %H:%M:%S'`
-dtgFile=`date '+%Y%m%d_%H%M%S'`
-
-
-## LOAD CONFIGURATION
-confFile=${__conf}/revoke.conf
-source ${confFile}
-
-## LOAD FUNCTIONS
-source ${__bin}/revoke_verify.sh
-source ${__bin}/revoke_help.sh
-source ${__bin}/revoke_status.sh
-source ${__bin}/revoke_config.sh
-
-## PERFORM VALIDATION
-verify_module
-
-
-## GENERAL FUNCTIONS
-if [ "${arg1}" == "--help" ]
-then
-  print_help
-fi
-
-if [ "${arg1}" == "--version" ]
-then
-  printf "revoke/${ver}\n"
-fi
-
-if [ "${arg1}" == "--status" ]
-then
-  print_status
-fi
-
-if [ "${arg1}" == "--config" ]
-then
-  init_config
-fi
-
-
-## MAIN FUNCTIONS
-
-
-
-exit 0
-## OLD SCRIPT BELOW 
 # SCRIPT VARIABLES
 scriptName=$0
 scriptVersion="1.0.1"
@@ -79,7 +14,7 @@ logFile="/var/log/revoke.log"
 counterA=0
 timeDate=$(date '+%Y-%m-%d %H:%M:%S')
 fileDTG=$(date '+%Y%m%d-%H%M%S')
-#defGW=$(ip route show default | awk '/default/ {print $3}')
+defGW=$(ip route show default | awk '/default/ {print $3}')
 
 # SCRIPT STARTUP
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] (00) revoke v$scriptVersion started" >> $logFile
@@ -95,7 +30,17 @@ else
   echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] (00) Configuration file loaded sucessfully, $confFile" >> $logFile
 fi
 
-source bin/netcheck.sh
+
+## CHECK FOR NETWORK CONNECTIVTY
+ping -c 1 $defGW >/dev/null 2>&1;
+pingExit=$?
+if [ $pingExit -eq 0 ]
+then
+   echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] (00) Default gateway available, $defGW" >> $logFile
+else
+  echo "[$(date '+%Y-%m-%d %H:%M:%S')] [error] (64) Default gateway is unreachable, $defGW" >> $logFile
+  exit 64
+fi
 
 
 # DOWNLOAD CRL(s)
