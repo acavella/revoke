@@ -3,7 +3,7 @@
 # NAME: revoke.sh
 # DECRIPTION: Perform downloads of remote CRL data and host them locally via HTTPD.
 # AUTHOR: Tony Cavella (tony@cavella.com)
-# GITHUB: https://github.com/tonycavella/revoke
+# SOURCE: https://github.com/altCipher/revoke
 
 # SCRIPT VARIABLES
 scriptName=$0
