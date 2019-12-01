@@ -1,13 +1,24 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # NAME: revoke.sh
 # DECRIPTION: Perform downloads of remote CRL data and host them locally via HTTPD.
 # AUTHOR: Tony Cavella (tony@cavella.com)
 # SOURCE: https://github.com/altCipher/revoke
 
-# SCRIPT VARIABLES
+## CONFIGURE DEFAULT ENVIRONMENT
+set -o errexit
+set -o pipefail
+set -o nounset
+#set -o xtrace
+
+## VARIABLES
+__dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+__bin="${__dir}/bin"
+__conf="${__dir}/conf"
+
+ver=$(<VERSION)
+
 scriptName=$0
-scriptVersion="1.0.1"
 baseDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 confFile="$baseDIR""/conf/revoke.conf"
 logFile="/var/log/revoke.log"
@@ -17,7 +28,7 @@ fileDTG=$(date '+%Y%m%d-%H%M%S')
 defGW=$(ip route show default | awk '/default/ {print $3}')
 
 # SCRIPT STARTUP
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] (00) revoke v$scriptVersion started" >> $logFile
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] (00) revoke v$ver started" >> $logFile
 
 
 ## CHECK AND LOAD EXTERNAL CONFIG
