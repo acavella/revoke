@@ -16,16 +16,13 @@ __dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 __bin="${__dir}/bin"
 __conf="${__dir}/conf"
 
-ver=$(<VERSION)
+ver="0.1"
+confFile="${__conf}/install.conf"
+logFile="${__dir}/revoke_install.log"
 
-scriptName=$0
-baseDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-confFile="$baseDIR""/conf/revoke.conf"
-logFile="/var/log/revoke.log"
-counterA=0
-timeDate=$(date '+%Y-%m-%d %H:%M:%S')
+printDTG=$(date '+%Y-%m-%d %H:%M:%S')
 fileDTG=$(date '+%Y%m%d-%H%M%S')
-defGW=$(ip route show default | awk '/default/ {print $3}')
+
 
 # SCRIPT STARTUP
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] (00) revoke v$ver started" >> $logFile
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] (00) revoke install v$ver started" >> $logFile
