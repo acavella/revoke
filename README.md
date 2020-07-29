@@ -1,16 +1,16 @@
 <!-- PROJECT LOGO -->
 <p align="center">
-  <a href="https://github.com/revokehq/revoke">
+  <a href="https://github.com/altCipher/revoke">
     <img src="images/logo.png" alt="Logo">
   </a>
 </p>
 
 <!-- PROJECT SHIELDS -->
 <p align="center">
-  <a href="https://github.com/revokehq/revoke/"><img src="https://img.shields.io/badge/build-passing-brightgreen.svg" alt="Build Status"></a>
-  <img src="https://img.shields.io/github/contributors/revokehq/revoke.svg" alt="Contributors">
-  <a href="LICENSE"><img src="https://img.shields.io/github/license/revokehq/revoke.svg" alt="License"></a>
-  <a href="https://github.com/revokehq/revoke/releases"><img src="https://img.shields.io/github/release/revokehq/revoke.svg" alt="Latest Stable Version"></a>
+  <a href="https://github.com/altCipher/revoke/"><img src="https://img.shields.io/badge/build-passing-brightgreen.svg" alt="Build Status"></a>
+  <img src="https://img.shields.io/github/contributors/altCipher/revoke.svg" alt="Contributors">
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/altCipher/revoke.svg" alt="License"></a>
+  <a href="https://github.com/revokehq/revoke/releases"><img src="https://img.shields.io/github/release/altCipher/revoke.svg" alt="Latest Stable Version"></a>
   <a href="https://bestpractices.coreinfrastructure.org/projects/2731"><img src="https://bestpractices.coreinfrastructure.org/projects/2731/badge"></a>
 </p>
 
@@ -57,7 +57,7 @@ Distributed under the GNU General Public License v3.0. See `LICENSE` for more in
 
 Tony Cavella - tony@cavella.com
 
-Project Link: [https://github.com/revokehq/revoke](https://github.com/revokehq/revoke)
+Project Link: [https://github.com/altCipher/revoke](https://github.com/altCipher/revoke)
 
 <!-- ACKNOWLEDGEMENTS -->
 ## Acknowledgements
