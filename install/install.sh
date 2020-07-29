@@ -25,4 +25,4 @@ fileDTG=$(date '+%Y%m%d-%H%M%S')
 
 
 # SCRIPT STARTUP
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] (00) revoke install v$ver started" >> $logFile
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] revoke install v$ver started" 2>&1 | tee -a $logFile
