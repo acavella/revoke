@@ -21,6 +21,8 @@ confFile="${__conf}/install.conf"
 installDir="/usr/local/bin/revoke/"
 logFile="${__dir}/revoke_install.log"
 
+supportedOS="Fedora"
+
 printDTG=$(date '+%Y-%m-%d %H:%M:%S')
 fileDTG=$(date '+%Y%m%d-%H%M%S')
 
@@ -46,12 +48,26 @@ fi
 
 # OPERATING SYSTEM CHECK
 detected_os_pretty=$(cat /etc/*release | grep PRETTY_NAME | cut -d '=' -f2- | tr -d '"')
-detected_os="${detected_os_pretty%% *}"
+detectedOS="${detected_os_pretty%% *}"
 detected_version=$(cat /etc/*release | grep VERSION_ID | cut -d '=' -f2- | tr -d '"')
 
+for i in ${supportedOS[@]}; do 
+    if [ "$detectedOS" = "$i" ]; then
+        echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] Operating System detected: ${detected_os_pretty}" 2>&1 | tee -a $logFile
+    else
+        echo "[$(date '+%Y-%m-%d %H:%M:%S')] [error] ${detected_os_pretty} is not currently supported, exiting." 2>&1 | tee -a $logFile
+        exit
+    fi
+done
+
 # PACKAGE MANAGER CHECK
-if is_command dnf ; then
-    PKG_MANAGER="dnf"
+if [ "$detectedOS" = "Fedora" ] || [ "$detectedOS" = "CentOS" ]; then
+    if is_command dnf ; then
+        PKG_MANAGER="dnf"
+    else
+        PKG_MANAGER="yum"
+    fi
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] Package Manager detected: $PKG_MANAGER" 2>&1 | tee -a $logFile
 else
-    PKG_MANAGER="yum"
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] [error] Unable to detect appropriate package manager." 2>&1 | tee -a $logFile
 fi
