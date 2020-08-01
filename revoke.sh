@@ -41,6 +41,15 @@ else
   echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] (00) Configuration file loaded sucessfully, $confFile" >> $logFile
 fi
 
+checkHash () {
+        hash1=$(sha1sum $1 | awk '{print $1;}')
+        hash2=$(sha1sum $2 | awk '{print $1;}')
+        if [ $hash1 = $hash2 ]; then
+                return 1 # true
+        else
+                return 0 # false
+        fi
+}
 
 ## CHECK FOR NETWORK CONNECTIVTY
 ping -c 1 $defGW >/dev/null 2>&1;
