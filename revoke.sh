@@ -17,15 +17,14 @@ __bin="${__dir}/bin"
 __conf="${__dir}/conf"
 
 ver=$(<VERSION)
-
 scriptName=$0
-baseDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-confFile="$baseDIR""/conf/revoke.conf"
+
+confFile="${__conf}/revoke.conf"
 logFile="/var/log/revoke.log"
 counterA=0
 timeDate=$(date '+%Y-%m-%d %H:%M:%S')
 fileDTG=$(date '+%Y%m%d-%H%M%S')
-defGW=$(ip route show default | awk '/default/ {print $3}')
+defGW=$(/usr/sbin/ip route show default | awk '/default/ {print $3}')
 
 # SCRIPT STARTUP
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] (00) revoke v$ver started" >> $logFile
