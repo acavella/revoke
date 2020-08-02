@@ -27,17 +27,17 @@ fileDTG=$(date '+%Y%m%d-%H%M%S')
 defGW=$(/usr/sbin/ip route show default | awk '/default/ {print $3}')
 
 # SCRIPT STARTUP
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] (00) revoke v$ver started" >> $logFile
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] revoke v$ver" 2>&1 | tee -a $logFile
 
 
 ## CHECK AND LOAD EXTERNAL CONFIG
 if [ ! -e $confFile ]
 then
-  echo "[$(date '+%Y-%m-%d %H:%M:%S')] [error] (64) Configuration file missing, please run setup.sh" >> $logFile
-  exit 64
+  echo "[$(date '+%Y-%m-%d %H:%M:%S')] [error] Unabled to locate configuration, exiting." 2>&1 | tee -a $logFile
+  exit 1
 else
   source $confFile
-  echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] (00) Configuration file loaded sucessfully, $confFile" >> $logFile
+  echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] Configuration loaded, $confFile." 2>&1 | tee -a $logFile
 fi
 
 checkHash () {
