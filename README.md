@@ -16,18 +16,20 @@
 
 ## Overview
 
-Automates the download and hosting of CRL data from a remote Certificate Authority.  Revoke is designed to be executed via chron.  
+Automates the download and hosting of CRL data from a remote Certificate Authorities. 
 
+- Main scripts written in Bash to maximize native compatibility and remain lightweight
 - Retrieve remote CRL data via HTTP or HTTPS
 - Validates remote CRL data
-- Serves CRLs via local HTTPD
-- Written using BASH to maximize native compatibility and remain lighweight
+- CRLs served via built-in Lighttpd server
+- Data and configurations stored via SQLite3
 - Retrieve an unlimited number of CRLs
 - Support for full and delta CRLs
 
 ## Requirements
 - Bash
-- Apache HTTP Server 2.4 
+- Lighttpd
+- SQLite3 
 - OpenSSL 1.0.2 or later
 - Curl 7.29 or later
 

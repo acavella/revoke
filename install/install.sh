@@ -82,7 +82,7 @@ echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] Initializing SQLite database." 2>&1 
 sqlite3 ${dbDir}/revoke.db <<'END_SQL'
 CREATE TABLE crl_table (
         crl_id integer PRIMARY KEY AUTOINCREMENT,
-        crl_target text,
+        crl_source text,
         crl_name text
 );
 END_SQL
