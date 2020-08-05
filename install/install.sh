@@ -18,7 +18,8 @@ __conf="${__dir}/conf"
 
 ver="0.1"
 confFile="${__conf}/install.conf"
-installDir="/usr/local/bin/revoke/"
+installDir="/usr/local/bin/revoke"
+dbDir="/usr/local/bin/revoke/db"
 logFile="${__dir}/revoke_install.log"
 
 supportedOS="Fedora"
@@ -71,3 +72,18 @@ if [ "$detectedOS" = "Fedora" ] || [ "$detectedOS" = "CentOS" ]; then
 else
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] [error] Unable to detect appropriate package manager." 2>&1 | tee -a $logFile
 fi
+
+# CREATE DIRECTORIES
+mkdir -p ${installDir}
+mkdir -p ${installDir}/{conf,db}
+
+# INITIALIZE DATABASE
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] Initializing SQLite database." 2>&1 | tee -a $logFile
+sqlite3 ${dbDir}/revoke.db <<'END_SQL'
+CREATE TABLE crl_table (
+        crl_id integer PRIMARY KEY AUTOINCREMENT,
+        crl_target text,
+        crl_name text
+);
+END_SQL
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] Database initialization completed." 2>&1 | tee -a $logFile
