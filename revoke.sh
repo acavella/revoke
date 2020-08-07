@@ -15,6 +15,7 @@ set -o nounset
 __dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 __bin="${__dir}/bin"
 __conf="${__dir}/conf"
+__db="${__dir}/db/revoke.db"
 
 ver=$(<VERSION)
 scriptName=$0
@@ -25,6 +26,23 @@ counterA=0
 timeDate=$(date '+%Y-%m-%d %H:%M:%S')
 fileDTG=$(date '+%Y%m%d-%H%M%S')
 defGW=$(/usr/sbin/ip route show default | awk '/default/ {print $3}')
+
+# FUNCTIONS
+checkHash () {
+        hash1=$(sha1sum $1 | awk '{print $1;}')
+        hash2=$(sha1sum $2 | awk '{print $1;}')
+        if [ $hash1 = $hash2 ]; then
+                return 1 # true
+        else
+                return 0 # false
+        fi
+}
+
+addCrl () { 
+  read -p "Enter revocation list Uri: " crlUri
+  read -p "Enter revocation list short name: " crlName
+  sqlite3 ${__db} "insert into crl_table values('${crlUri}','${crlName}');"
+}
 
 # SCRIPT STARTUP
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] revoke v$ver" 2>&1 | tee -a $logFile
@@ -39,16 +57,6 @@ else
   source $confFile
   echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] Configuration loaded, $confFile." 2>&1 | tee -a $logFile
 fi
-
-checkHash () {
-        hash1=$(sha1sum $1 | awk '{print $1;}')
-        hash2=$(sha1sum $2 | awk '{print $1;}')
-        if [ $hash1 = $hash2 ]; then
-                return 1 # true
-        else
-                return 0 # false
-        fi
-}
 
 ## CHECK FOR NETWORK CONNECTIVTY
 ping -c 1 $defGW >/dev/null 2>&1;
