@@ -28,8 +28,8 @@ Automates the download and hosting of CRL data from a remote Certificate Authori
 
 ## Requirements
 - Bash
-- Lighttpd
-- SQLite3 
+- Lighttpd 1.4.x
+- SQLite 3.x.x
 - OpenSSL 1.0.2 or later
 - Curl 7.29 or later
 
