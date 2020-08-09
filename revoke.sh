@@ -49,7 +49,7 @@ showCrl () {
 }
 
 remCrl () {
-  read -p "Enter ROW_ID or CRL_Name to remove: " remSelection
+  read -p "Enter ROW_ID to remove: " remSelection
   sqlite3 ${__db} "DELETE FROM crlList WHERE ROW_ID = '${remSelection}';"
 }
 
