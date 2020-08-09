@@ -73,6 +73,19 @@ else
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] [error] Unable to detect appropriate package manager." 2>&1 | tee -a $logFile
 fi
 
+# DEPENDENCY CHECK
+REVOKE_DEPS=(sqlite3 curl git)
+
+for i in "${REVOKE_DEPS[@]}"
+do
+    if is_command ${i}; then
+        :
+    else
+        echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] Installing dependency: ${i}" 2>&1 | tee -a $logFile
+        ${PKG_MANAGER} install ${i} -y &> /dev/null
+    fi
+done
+
 # CREATE DIRECTORIES
 mkdir -p ${installDir}
 mkdir -p ${installDir}/{conf,db}
