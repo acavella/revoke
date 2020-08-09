@@ -93,10 +93,10 @@ mkdir -p ${installDir}/{conf,db}
 # INITIALIZE DATABASE
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] Initializing SQLite database." 2>&1 | tee -a $logFile
 sqlite3 ${dbDir}/revoke.db <<'END_SQL'
-CREATE TABLE crl_table (
-        crl_id integer PRIMARY KEY AUTOINCREMENT,
-        crl_source text,
-        crl_name text
+CREATE TABLE crlList (
+        Row_ID integer PRIMARY KEY AUTOINCREMENT,
+        CRL_Uri text,
+        CRL_Name text
 );
 END_SQL
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] Database initialization completed." 2>&1 | tee -a $logFile
