@@ -39,8 +39,8 @@ checkHash () {
 }
 
 addCrl () { 
-  read -p "Enter revocation list Uri: " crlUri
-  read -p "Enter revocation list short name: " crlName
+  read -p "Enter revocation list Uri (Example: https://crl.pki.goog/gtsr1/gtsr1.crl): " crlUri
+  read -p "Enter revocation list short name (Example: GTRS1): " crlName
   sqlite3 ${__db} "INSERT INTO crlList VALUES(NULL,'${crlUri}','${crlName}');"
 }
 
