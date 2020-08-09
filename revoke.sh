@@ -41,7 +41,16 @@ checkHash () {
 addCrl () { 
   read -p "Enter revocation list Uri: " crlUri
   read -p "Enter revocation list short name: " crlName
-  sqlite3 ${__db} "insert into crl_table values('${crlUri}','${crlName}');"
+  sqlite3 ${__db} "INSERT INTO crl_table VALUES('${crlUri}','${crlName}');"
+}
+
+showCrl () {
+  sqlite3 ${__db} "SELECT * FROM crl_table;"
+}
+
+remCrl () {
+  read -p "Enter ROW_ID or CRL_Name to remove: " remSelection
+  sqlite3 ${__db} "DELETE FROM crl_table WHERE ROW_ID = '${remSelection}';"
 }
 
 # SCRIPT STARTUP
