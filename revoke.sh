@@ -94,9 +94,8 @@ then
    echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] (00) Default gateway available, $defGW" >> $logFile
 else
   echo "[$(date '+%Y-%m-%d %H:%M:%S')] [error] (64) Default gateway is unreachable, $defGW" >> $logFile
-  exit 64
+  exit 1
 fi
-
 
 # DOWNLOAD CRL(s)
 for i in "${crlURL[@]}"
@@ -111,6 +110,5 @@ do
   fi
 let counterA=counterA+1
 done
-
 
 exit 0
