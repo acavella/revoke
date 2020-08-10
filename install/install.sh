@@ -74,7 +74,7 @@ else
 fi
 
 # DEPENDENCY CHECK
-REVOKE_DEPS=(sqlite3 curl git)
+REVOKE_DEPS=(sqlite3 curl git openssl)
 
 for i in "${REVOKE_DEPS[@]}"
 do
