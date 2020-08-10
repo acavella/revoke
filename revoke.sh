@@ -53,6 +53,25 @@ remCrl () {
   sqlite3 ${__db} "DELETE FROM crlList WHERE ROW_ID = '${remSelection}';"
 }
 
+validateCrl () {
+  ## Dirty check for PEM vs DER
+  cat ${1} | grep "Begin X509 CRL"
+
+  ## Read CRL with OpenSSL
+  if [ $? -eq 0 ]; then
+    openssl crl -text -noout -in ${1} | grep "Certificate Revocation List" &> /dev/null
+  else
+    openssl crl -inform DER -text -noout -in ${1} | grep "Certificate Revocation List" &> /dev/null
+  fi
+
+  # Return validation
+  if [ $? -eq 0 ]; then
+    return 1 # true / CRL valid
+  else
+    return 0 # false / CRL invalid
+  fi
+}
+
 # SCRIPT STARTUP
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] revoke v$ver" 2>&1 | tee -a $logFile
 
