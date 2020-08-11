@@ -16,6 +16,7 @@ __dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 __bin="${__dir}/bin"
 __conf="${__dir}/conf"
 __db="${__dir}/db/revoke.db"
+__www="/var/www/revoke"
 
 ver=$(<VERSION)
 scriptName=$0
@@ -113,6 +114,7 @@ fi
 validateConn
 
 # DOWNLOAD CRL(s)
+
 for i in "${crlURL[@]}"
 do
   curl -k -s $i > $downloadDIR${crlName[$counterA]}
