@@ -96,6 +96,8 @@ validateConn () {
 # SCRIPT STARTUP
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] revoke v$ver" 2>&1 | tee -a $logFile
 
+# CONFIGURATION AND CLI INPUT 
+
 
 # CHECK AND LOAD EXTERNAL CONFIG
 if [ ! -e $confFile ]
@@ -107,7 +109,7 @@ else
   echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] Configuration loaded, $confFile." 2>&1 | tee -a $logFile
 fi
 
-## CHECK FOR NETWORK CONNECTIVTY
+# CHECK FOR NETWORK CONNECTIVTY
 validateConn
 
 # DOWNLOAD CRL(s)
