@@ -29,13 +29,15 @@ defGW=$(/usr/sbin/ip route show default | awk '/default/ {print $3}')
 
 # FUNCTIONS
 checkHash () {
-        hash1=$(sha1sum $1 | awk '{print $1;}')
-        hash2=$(sha1sum $2 | awk '{print $1;}')
-        if [ $hash1 = $hash2 ]; then
-                return 1 # true
-        else
-                return 0 # false
-        fi
+  hash1=$(sha1sum $1 | awk '{print $1;}')
+  hash2=$(sha1sum $2 | awk '{print $1;}')
+        
+  if [ $hash1 = $hash2 ] 
+  then
+    return 1 # true
+  else
+    return 0 # false
+  fi
 }
 
 addCrl () { 
@@ -58,17 +60,36 @@ validateCrl () {
   cat ${1} | grep "Begin X509 CRL"
 
   ## Read CRL with OpenSSL
-  if [ $? -eq 0 ]; then
+  if [ $? -eq 0 ] 
+  then
     openssl crl -text -noout -in ${1} | grep "Certificate Revocation List" &> /dev/null
   else
     openssl crl -inform DER -text -noout -in ${1} | grep "Certificate Revocation List" &> /dev/null
   fi
 
-  # Return validation
-  if [ $? -eq 0 ]; then
+  ## Return validation
+  if [ $? -eq 0 ] 
+  then
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] Valid CRL found, ${1}" 2>&1 | tee -a $logFile
     return 1 # true / CRL valid
   else
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] [error] Invalid CRL file, ${1}" 2>&1 | tee -a $logFile
     return 0 # false / CRL invalid
+    exit 1
+  fi
+}
+
+validateConn () {
+  ## Attempt to ping default gateway
+  ping -c 1 $defGW &> /dev/null
+
+  ## Continue if success, exit if fail
+  if [ $? -eq 0 ]
+  then
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] Default gateway available, $defGW" 2>&1 | tee -a $logFile
+  else
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] [error] Default gateway is unreachable, $defGW" 2>&1 | tee -a $logFile
+    exit 1
   fi
 }
 
@@ -76,7 +97,7 @@ validateCrl () {
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] revoke v$ver" 2>&1 | tee -a $logFile
 
 
-## CHECK AND LOAD EXTERNAL CONFIG
+# CHECK AND LOAD EXTERNAL CONFIG
 if [ ! -e $confFile ]
 then
   echo "[$(date '+%Y-%m-%d %H:%M:%S')] [error] Unabled to locate configuration, exiting." 2>&1 | tee -a $logFile
@@ -87,15 +108,7 @@ else
 fi
 
 ## CHECK FOR NETWORK CONNECTIVTY
-ping -c 1 $defGW >/dev/null 2>&1;
-pingExit=$?
-if [ $pingExit -eq 0 ]
-then
-   echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] (00) Default gateway available, $defGW" >> $logFile
-else
-  echo "[$(date '+%Y-%m-%d %H:%M:%S')] [error] (64) Default gateway is unreachable, $defGW" >> $logFile
-  exit 1
-fi
+validateConn
 
 # DOWNLOAD CRL(s)
 for i in "${crlURL[@]}"
