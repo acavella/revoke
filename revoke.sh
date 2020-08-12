@@ -44,7 +44,11 @@ checkHash () {
 addCrl () { 
   read -p "Enter revocation list Uri (Example: https://crl.pki.goog/gtsr1/gtsr1.crl): " crlUri
   read -p "Enter revocation list short name (Example: GTRS1): " crlName
-  sqlite3 ${__db} "INSERT INTO crlList VALUES(NULL,'${crlUri}','${crlName}');"
+  # Create CRL directory in __www
+  # Download CRL
+  # Validate CRL
+  # Get initial CRL hash
+  sqlite3 ${__db} "INSERT INTO crlList VALUES(NULL,'${crlUri}','${crlName}');" # Add crlHash
 }
 
 showCrl () {
@@ -123,6 +127,7 @@ crlName=$(sqlite3 ${__db} "SELECT CRL_Name FROM crlList;")
 for row in "${rows[@]}"
 do
   curl -k -s ${crlUri[$count]} > "/tmp/${crlName[$count]}"
+
   if [ ! -e $downloadDIR${crlName[$counterA]} ]
   then
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] [error] (64) crl download failed, $i" >> $logFile
