@@ -114,10 +114,15 @@ fi
 validateConn
 
 # DOWNLOAD CRL(s)
+count="1"
 
-for i in "${crlURL[@]}"
+rows=$(sqlite3 ${__db} "SELECT Row_ID FROM crlList;")
+crlUri=$(sqlite3 ${__db} "SELECT CRL_Uri FROM crlList;")
+crlName=$(sqlite3 ${__db} "SELECT CRL_Name FROM crlList;")
+
+for row in "${rows[@]}"
 do
-  curl -k -s $i > $downloadDIR${crlName[$counterA]}
+  curl -k -s ${crlUri[$count]} > "/tmp/${crlName[$count]}"
   if [ ! -e $downloadDIR${crlName[$counterA]} ]
   then
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] [error] (64) crl download failed, $i" >> $logFile
