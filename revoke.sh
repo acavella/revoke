@@ -44,11 +44,18 @@ checkHash () {
 addCrl () { 
   read -p "Enter revocation list Uri (Example: https://crl.pki.goog/gtsr1/gtsr1.crl): " crlUri
   read -p "Enter revocation list short name (Example: GTRS1): " crlName
-  # Create CRL directory in __www
-  # Download CRL
-  # Validate CRL
-  # Get initial CRL hash
-  sqlite3 ${__db} "INSERT INTO crlList VALUES(NULL,'${crlUri}','${crlName}');" # Add crlHash
+  mkdir -p ${__www}/${crlName}  # Create CRL directory in __www
+  curl -o ${__www}/${crlName}/${crlName}.crl -k -s ${crlUri}  # Download CRL
+  validateCrl ${__www}/${crlName}/${crlName}.crl  # Validate CRL
+  if [ $? -eq 0 ]
+  then
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] [error] Unable to validate CRL, validate URL and try again." 2>&1 | tee -a $logFile
+    rm -rf ${__www}/${crlName}
+    exit 1
+  else
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] Valid CRL found and added." 2>&1 | tee -a $logFile
+    shaHash=$(sha1sum ${__www}/${crlName}/${crlName}.crl)  # Get initial CRL hash
+    sqlite3 ${__db} "INSERT INTO crlList VALUES(NULL,'${crlUri}','${crlName}','${shaHash}');" # Add crlHash
 }
 
 showCrl () {
@@ -75,12 +82,9 @@ validateCrl () {
   ## Return validation
   if [ $? -eq 0 ] 
   then
-    echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] Valid CRL found, ${1}" 2>&1 | tee -a $logFile
     return 1 # true / CRL valid
   else
-    echo "[$(date '+%Y-%m-%d %H:%M:%S')] [error] Invalid CRL file, ${1}" 2>&1 | tee -a $logFile
     return 0 # false / CRL invalid
-    exit 1
   fi
 }
 
