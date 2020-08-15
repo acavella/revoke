@@ -49,7 +49,17 @@ showVer () {
 }
 
 showHelp () {
-
+  # Display Help
+  echo "Add description of the script functions here."
+  echo
+  echo "Syntax: revoke [-h|v]"
+  echo "options:"
+  echo "-h        Print this Help."
+  echo "-V        Verbose mode."
+  echo "--add     Add new CRL to revoke database."
+  echo "--list    List CRLs currently in revoke database."
+  echo "--del     Remove CRL from revoke database."
+  echo
 }
 
 addCrl () { 
