@@ -19,7 +19,8 @@ __db="${__dir}/db/revoke.db"
 __www="/var/www/revoke"
 
 ver=$(<VERSION)
-scriptName=$0
+lighttpdVer=$(lighttpd -v | awk '{print $1;}')
+opensslVer=$(openssl -v | awk '{print $1;}')
 
 confFile="${__conf}/revoke.conf"
 logFile="/var/log/revoke.log"
@@ -39,6 +40,12 @@ checkHash () {
   else
     return 0 # false
   fi
+}
+
+showVer () {
+  echo "[$(date '+%Y-%m-%d %H:%M:%S')] [version] revoke: ${ver}" 2>&1 | tee -a $logFile
+  echo "[$(date '+%Y-%m-%d %H:%M:%S')] [version] lighttpd: ${lighttpdVer}" 2>&1 | tee -a $logFile
+  echo "[$(date '+%Y-%m-%d %H:%M:%S')] [version] revoke: ${opensslVer}" 2>&1 | tee -a $logFile
 }
 
 addCrl () { 
