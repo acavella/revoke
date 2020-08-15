@@ -30,18 +30,6 @@ fileDTG=$(date '+%Y%m%d-%H%M%S')
 defGW=$(/usr/sbin/ip route show default | awk '/default/ {print $3}')
 
 # FUNCTIONS
-checkHash () {
-  hash1=$(sha1sum $1 | awk '{print $1;}')
-  hash2=$(sha1sum $2 | awk '{print $1;}')
-        
-  if [ $hash1 = $hash2 ] 
-  then
-    return 1 # true
-  else
-    return 0 # false
-  fi
-}
-
 showVer () {
   echo "[$(date '+%Y-%m-%d %H:%M:%S')] [version] revoke: ${ver}" 2>&1 | tee -a $logFile
   echo "[$(date '+%Y-%m-%d %H:%M:%S')] [version] lighttpd: ${lighttpdVer}" 2>&1 | tee -a $logFile
@@ -49,7 +37,6 @@ showVer () {
 }
 
 showHelp () {
-  # Display Help
   echo "Add description of the script functions here."
   echo
   echo "Syntax: revoke [-h|v]"
@@ -60,6 +47,18 @@ showHelp () {
   echo "--list    List CRLs currently in revoke database."
   echo "--del     Remove CRL from revoke database."
   echo
+}
+
+checkHash () {
+  hash1=$(sha1sum $1 | awk '{print $1;}')
+  hash2=$(sha1sum $2 | awk '{print $1;}')
+        
+  if [ $hash1 = $hash2 ] 
+  then
+    return 1 # true
+  else
+    return 0 # false
+  fi
 }
 
 addCrl () { 
