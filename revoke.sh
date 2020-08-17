@@ -122,6 +122,16 @@ validateConn () {
   fi
 }
 
+if [ "${1}" == "--help" ] || [ "${1}" == "-h" ]
+then
+  showHelp
+elif [ "${1}" == "--version"] || ["${1}" == "-V" ]
+then
+  showVer
+else
+  :
+fi
+
 # SCRIPT STARTUP
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] revoke v$ver" 2>&1 | tee -a $logFile
 
