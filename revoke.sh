@@ -170,6 +170,7 @@ do
     rm -f /tmp/${crlName[$count]}.crl
   else
     sqlite3 ${__db} "UPDATE crlList SET CRL_Hash = '${dlHash}' WHERE Row_ID = $count;" 
+    mv /tmp/${crlName[$count]}.crl ${__www}/${crlName[$count]}/ # COPY TMP CRL TO WWW
   fi
 
   
