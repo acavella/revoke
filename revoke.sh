@@ -168,6 +168,8 @@ do
   then
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] CRL hash match, no new CRL data found." 2>&1 | tee -a $logFile
     rm -f /tmp/${crlName[$count]}.crl
+  else
+    sqlite3 ${__db} "UPDATE crlList SET CRL_Hash = '${dlHash}' WHERE Row_ID = $count;" 
   fi
 
   
