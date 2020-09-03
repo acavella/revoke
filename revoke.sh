@@ -157,10 +157,19 @@ count="1"
 rows=$(sqlite3 ${__db} "SELECT Row_ID FROM crlList;")
 crlUri=$(sqlite3 ${__db} "SELECT CRL_Uri FROM crlList;")
 crlName=$(sqlite3 ${__db} "SELECT CRL_Name FROM crlList;")
+crlHash=$(sqlite3 ${__db} "SELECT CRL_Hash FROM crlList;")
 
 for row in "${rows[@]}"
 do
-  curl -k -s ${crlUri[$count]} > "/tmp/${crlName[$count]}"
+  curl -k -s ${crlUri[$count]} > "/tmp/${crlName[$count]}.crl" # DOWNLOAD CRL TO TMP
+  dlHash=$(sha1sum /tmp/${crlName[$count]}.crl) # GET TMP CRL HASH
+  validateCrl /tmp/${crlName[$count]}.crl # VALIDATE CRL
+  if [ $dlHash = ${crlHash[$count]} ] # COMPARE STORED AND DL HASH
+  then
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] CRL hash match, no new CRL data found." 2>&1 | tee -a $logFile
+    rm -f /tmp/${crlName[$count]}.crl
+  fi
+
   
   if [ ! -e $downloadDIR${crlName[$counterA]} ]
   then
