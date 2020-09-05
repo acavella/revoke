@@ -73,9 +73,10 @@ addCrl () {
     rm -rf ${__www}/${crlName}
     exit 1
   else
+    crlDTG=$(date '+%Y%m%d %H%M%S')
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] Valid CRL found and added." 2>&1 | tee -a $logFile
     shaHash=$(sha1sum ${__www}/${crlName}/${crlName}.crl)  # Get initial CRL hash
-    sqlite3 ${__db} "INSERT INTO crlList VALUES(NULL,'${crlUri}','${crlName}','${shaHash}');" # Add crlHash
+    sqlite3 ${__db} "INSERT INTO crlList VALUES(NULL,'${crlUri}','${crlName}','${shaHash}','${crlDTG});" # Add crlHash
 }
 
 showCrl () {
@@ -161,6 +162,8 @@ crlHash=$(sqlite3 ${__db} "SELECT CRL_Hash FROM crlList;")
 
 for row in "${rows[@]}"
 do
+  crlDTG=$(date '+%Y%m%d %H%M%S')
+
   curl -k -s ${crlUri[$count]} > "/tmp/${crlName[$count]}.crl" # DOWNLOAD CRL TO TMP
   dlHash=$(sha1sum /tmp/${crlName[$count]}.crl) # GET TMP CRL HASH
   validateCrl /tmp/${crlName[$count]}.crl # VALIDATE CRL
@@ -170,7 +173,8 @@ do
     rm -f /tmp/${crlName[$count]}.crl
   else
     sqlite3 ${__db} "UPDATE crlList SET CRL_Hash = '${dlHash}' WHERE Row_ID = $count;" 
-    mv /tmp/${crlName[$count]}.crl ${__www}/${crlName[$count]}/ # COPY TMP CRL TO WWW
+    sqlite3 ${__db} "UPDATE crlList SET CRL_Date = '${crlDTG}' WHERE Row_ID = $count;"
+    mv /tmp/${crlName[$count]}.crl ${__www}/${crlName[$count]}/ # COPY TMP CRL TO WWW LOCATION
   fi
 
   
