@@ -97,7 +97,8 @@ CREATE TABLE crlList (
         Row_ID integer PRIMARY KEY AUTOINCREMENT,
         CRL_Uri text,
         CRL_Name text,
-        CRL_Hash text
+        CRL_Hash text,
+        CRL_Date text
 );
 END_SQL
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] Database initialization completed." 2>&1 | tee -a $logFile
