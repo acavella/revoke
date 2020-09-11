@@ -25,7 +25,7 @@ logFile="/var/log/revoke.log"
 counterA=0
 timeDate=$(date '+%Y-%m-%d %H:%M:%S')
 fileDTG=$(date '+%Y%m%d-%H%M%S')
-defGW=$(ip route show default | awk '/default/ {print $3}')
+defGW=$(/usr/sbin/ip route show default | /usr/bin/awk '/default/ {print $3}')
 
 # SCRIPT STARTUP
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] (00) revoke v$ver started" >> $logFile
@@ -62,11 +62,15 @@ do
   then
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] [error] (64) crl download failed, $i" >> $logFile
   else 
-    echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] (00) crl download sucessful, $i" >> $logFile
-    mv $downloadDIR${crlName[$counterA]} $publicWWW
+    if [ -s $downloadDIR${crlName[$counterA]} ]
+    then
+      echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] (00) crl download sucessful, $i" >> $logFile
+      mv $downloadDIR${crlName[$counterA]} $publicWWW
+    else
+      echo "[$(date '+%Y-%m-%d %H:%M:%S')] [error] (64) crl download failed (zero-byte file), $i" >> $logFile
+    fi
   fi
 let counterA=counterA+1
 done
-
 
 exit 0
