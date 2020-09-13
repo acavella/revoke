@@ -76,7 +76,7 @@ addCrl () {
     crlDTG=$(date '+%Y%m%d %H%M%S')
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] Valid CRL found and added." 2>&1 | tee -a $logFile
     shaHash=$(sha1sum ${__www}/${crlName}/${crlName}.crl)  # Get initial CRL hash
-    sqlite3 ${__db} "INSERT INTO crlList VALUES(NULL,'${crlUri}','${crlName}','${shaHash}','${crlDTG});" # Add crlHash
+    sqlite3 ${__db} "INSERT INTO crlList VALUES(NULL,'${crlUri}','${crlName}','${shaHash}','${crlDTG}');" # Add crlHash
 }
 
 showCrl () {
