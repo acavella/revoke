@@ -83,6 +83,12 @@ do
     else
         echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] Installing dependency: ${i}" 2>&1 | tee -a $logFile
         ${PKG_MANAGER} install ${i} -y &> /dev/null
+        if [ $? = 0 ]
+        then
+            echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] Dependency installed: ${i}" 2>&1 | tee -a $logFile
+        else
+            echo "[$(date '+%Y-%m-%d %H:%M:%S')] [error] Unable to install dependency: ${i}" 2>&1 | tee -a $logFile
+        fi
     fi
 done
 
