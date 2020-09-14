@@ -79,7 +79,7 @@ REVOKE_DEPS=(sqlite3 curl git openssl tar gcc make openssl-devel bzip2-devel pcr
 for i in "${REVOKE_DEPS[@]}"
 do
     if is_command ${i}; then
-        :
+        echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] Dependency satisfied: ${i}" 2>&1 | tee -a $logFile
     else
         echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] Installing dependency: ${i}" 2>&1 | tee -a $logFile
         ${PKG_MANAGER} install ${i} -y &> /dev/null
