@@ -74,7 +74,7 @@ else
 fi
 
 # DEPENDENCY CHECK
-REVOKE_DEPS=(sqlite3 curl git openssl automake) 
+REVOKE_DEPS=(sqlite3 curl git openssl tar gcc make openssl-devel bzip2-devel pcre-devel) 
 
 for i in "${REVOKE_DEPS[@]}"
 do
