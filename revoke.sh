@@ -176,16 +176,7 @@ do
     sqlite3 ${__db} "UPDATE crlList SET CRL_Date = '${crlDTG}' WHERE Row_ID = $count;"
     mv /tmp/${crlName[$count]}.crl ${__www}/${crlName[$count]}/ # COPY TMP CRL TO WWW LOCATION
   fi
-
-  
-  if [ ! -e $downloadDIR${crlName[$counterA]} ]
-  then
-    echo "[$(date '+%Y-%m-%d %H:%M:%S')] [error] (64) crl download failed, $i" >> $logFile
-  else 
-    echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] (00) crl download sucessful, $i" >> $logFile
-    mv $downloadDIR${crlName[$counterA]} $publicWWW
-  fi
-let counterA=counterA+1
+  let count=count+1
 done
 
 exit 0
