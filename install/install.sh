@@ -108,3 +108,5 @@ CREATE TABLE crlList (
 );
 END_SQL
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] Database initialization completed." 2>&1 | tee -a $logFile
+
+# INSTALL LIGHTTPD 1.4.xx
