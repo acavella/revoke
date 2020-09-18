@@ -22,6 +22,8 @@ installDir="/usr/local/bin/revoke"
 dbDir="/usr/local/bin/revoke/db"
 logFile="${__dir}/revoke_install.log"
 
+src_lighttpd=${__dir}/lib/lighttpd-1.4.55.tar.gz
+
 supportedOS="Fedora"
 
 printDTG=$(date '+%Y-%m-%d %H:%M:%S')
@@ -110,3 +112,5 @@ END_SQL
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] Database initialization completed." 2>&1 | tee -a $logFile
 
 # INSTALL LIGHTTPD 1.4.xx
+cp $src_lighttpd /tmp/
+tar -zxf /tmp/lighttpd-1.4.55.tar.gz
