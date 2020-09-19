@@ -114,3 +114,26 @@ echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] Database initialization completed." 
 # INSTALL LIGHTTPD 1.4.xx
 cp $src_lighttpd /tmp/
 tar -zxf /tmp/lighttpd-1.4.55.tar.gz
+/tmp/lighttpd-1.4.55/configure <<'END_CONF'
+--host=i686-redhat-linux-gnu \
+--build=i686-redhat-linux-gnu \
+--target=i386-redhat-linux \
+--program-prefix= --prefix=/usr \
+--exec-prefix=/usr \
+--bindir=/usr/bin \
+--sbindir=/usr/sbin \
+--sysconfdir=/etc \
+--datadir=/usr/share \
+--includedir=/usr/include \
+--libdir=/usr/lib \
+--libexecdir=/usr/libexec \
+--localstatedir=/var \
+--sharedstatedir=/usr/com \
+--mandir=/usr/share/man \
+--infodir=/usr/share/info \
+--with-openssl \
+--with-pcre \
+--with-zlib \
+--with-bzip2 \
+--disable-ipv6 
+END_CONF
