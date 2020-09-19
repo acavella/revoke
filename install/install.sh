@@ -22,7 +22,7 @@ installDir="/usr/local/bin/revoke"
 dbDir="/usr/local/bin/revoke/db"
 logFile="${__dir}/revoke_install.log"
 
-src_lighttpd=${__dir}/lib/lighttpd-1.4.55.tar.gz
+www_dir="/var/www/html/revoke"
 
 supportedOS="Fedora"
 
@@ -76,7 +76,7 @@ else
 fi
 
 # DEPENDENCY CHECK
-REVOKE_DEPS=(sqlite3 curl git openssl tar gcc make openssl-devel bzip2-devel pcre-devel) 
+REVOKE_DEPS=(sqlite3 curl git openssl tar httpd) 
 
 for i in "${REVOKE_DEPS[@]}"
 do
@@ -111,29 +111,6 @@ CREATE TABLE crlList (
 END_SQL
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] Database initialization completed." 2>&1 | tee -a $logFile
 
-# INSTALL LIGHTTPD 1.4.xx
-cp $src_lighttpd /tmp/
-tar -zxf /tmp/lighttpd-1.4.55.tar.gz
-/tmp/lighttpd-1.4.55/configure <<'END_CONF'
---host=i686-redhat-linux-gnu \
---build=i686-redhat-linux-gnu \
---target=i386-redhat-linux \
---program-prefix= --prefix=/usr \
---exec-prefix=/usr \
---bindir=/usr/bin \
---sbindir=/usr/sbin \
---sysconfdir=/etc \
---datadir=/usr/share \
---includedir=/usr/include \
---libdir=/usr/lib \
---libexecdir=/usr/libexec \
---localstatedir=/var \
---sharedstatedir=/usr/com \
---mandir=/usr/share/man \
---infodir=/usr/share/info \
---with-openssl \
---with-pcre \
---with-zlib \
---with-bzip2 \
---disable-ipv6 
-END_CONF
+# INSTALL WEBSERVER
+
+
