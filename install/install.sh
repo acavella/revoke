@@ -20,14 +20,15 @@ ver="0.1"
 confFile="${__conf}/install.conf"
 installDir="/usr/local/bin/revoke"
 dbDir="/usr/local/bin/revoke/db"
-logFile="${__dir}/revoke_install.log"
+logFile="${installDir}/install.log"
+printDTG=$(date '+%Y-%m-%d %H:%M:%S')
+fileDTG=$(date '+%Y%m%d-%H%M%S')
 
-www_dir="/var/www/html/revoke"
+wwwDir="/var/www/html/revoke"
 
 supportedOS="Fedora"
 
-printDTG=$(date '+%Y-%m-%d %H:%M:%S')
-fileDTG=$(date '+%Y%m%d-%H%M%S')
+
 
 is_command() {
     # Checks for existence of string passed in as only function argument.
@@ -38,9 +39,6 @@ is_command() {
     command -v "${check_command}" >/dev/null 2>&1
 }
 
-# SCRIPT STARTUP
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] revoke install v$ver started" 2>&1 | tee -a $logFile
-
 # ROOT/SUDO CHECK
 if [ "$EUID" -ne 0 ] ; then 
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] [error] Installation must be executed as root or sudo, exiting." 2>&1 | tee -a $logFile
@@ -48,6 +46,13 @@ if [ "$EUID" -ne 0 ] ; then
 else 
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] Installation executed as root or sudo." 2>&1 | tee -a $logFile
 fi
+
+# CREATE DIRECTORIES
+mkdir -p ${installDir}
+mkdir -p ${installDir}/{conf,db}
+
+# SCRIPT STARTUP
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] revoke install v$ver started" 2>&1 | tee -a $logFile
 
 # OPERATING SYSTEM CHECK
 detected_os_pretty=$(cat /etc/*release | grep PRETTY_NAME | cut -d '=' -f2- | tr -d '"')
@@ -93,10 +98,6 @@ do
         fi
     fi
 done
-
-# CREATE DIRECTORIES
-mkdir -p ${installDir}
-mkdir -p ${installDir}/{conf,db}
 
 # INITIALIZE DATABASE
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] Initializing SQLite database." 2>&1 | tee -a $logFile
