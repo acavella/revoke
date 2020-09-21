@@ -20,13 +20,16 @@ ver="0.1"
 confFile="${__conf}/install.conf"
 installDir="/usr/local/bin/revoke"
 dbDir="/usr/local/bin/revoke/db"
+wwwDir="/var/www/html/revoke"
 logFile="${installDir}/install.log"
 printDTG=$(date '+%Y-%m-%d %H:%M:%S')
 fileDTG=$(date '+%Y%m%d-%H%M%S')
 
-wwwDir="/var/www/html/revoke"
 
-supportedOS="Fedora"
+
+supportedOS=("Fedora" "CentOS")
+REVOKE_DEPS=(sqlite3 curl openssl httpd) 
+INSTALL_DEPS=(tar)
 
 
 
@@ -52,12 +55,21 @@ mkdir -p ${installDir}
 mkdir -p ${installDir}/{conf,db}
 
 # SCRIPT STARTUP
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] revoke install v$ver started" 2>&1 | tee -a $logFile
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] Automated Installer v$ver" 2>&1 | tee -a $logFile
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] Installing: revoke" 2>&1 | tee -a $logFile
 
 # OPERATING SYSTEM CHECK
-detected_os_pretty=$(cat /etc/*release | grep PRETTY_NAME | cut -d '=' -f2- | tr -d '"')
+
+if [ -f "/etc/os-release" ]; then
+    rel="/etc/os-release"
+else
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] [error] Unable to determine OS version, automated installation exiting." 2>&1 | tee -a $logFile
+    exit 1
+fi
+
+detected_os_pretty=$(cat ${rel} | grep PRETTY_NAME | cut -d '=' -f2- | tr -d '"')
 detectedOS="${detected_os_pretty%% *}"
-detected_version=$(cat /etc/*release | grep VERSION_ID | cut -d '=' -f2- | tr -d '"')
+detected_version=$(cat ${rel} | grep VERSION_ID | cut -d '=' -f2- | tr -d '"')
 
 for i in ${supportedOS[@]}; do 
     if [ "$detectedOS" = "$i" ]; then
@@ -81,8 +93,6 @@ else
 fi
 
 # DEPENDENCY CHECK
-REVOKE_DEPS=(sqlite3 curl git openssl tar httpd) 
-
 for i in "${REVOKE_DEPS[@]}"
 do
     if is_command ${i}; then
