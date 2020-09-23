@@ -30,6 +30,7 @@ fileDTG=$(date '+%Y%m%d-%H%M%S')
 supportedOS=("Fedora" "CentOS")
 REVOKE_DEPS=(sqlite3 curl openssl httpd) 
 INSTALL_DEPS=(tar)
+IPV4_ADDRESS=${IPV4_ADDRESS}
 
 
 
@@ -40,6 +41,53 @@ is_command() {
     local check_command="$1"
 
     command -v "${check_command}" >/dev/null 2>&1
+}
+
+find_IPv4_information() {
+    # Detects IPv4 address used for communication to WAN addresses.
+    # Accepts no arguments, returns no values.
+
+    # Named, local variables
+    local route
+    local IPv4bare
+
+    # Find IP used to route to outside world by checking the the route to Google's public DNS server
+    route=$(ip route get 8.8.8.8)
+
+    # Get just the interface IPv4 address
+    # shellcheck disable=SC2059,SC2086
+    # disabled as we intentionally want to split on whitespace and have printf populate
+    # the variable with just the first field.
+    printf -v IPv4bare "$(printf ${route#*src })"
+    # Get the default gateway IPv4 address (the way to reach the Internet)
+    # shellcheck disable=SC2059,SC2086
+    printf -v IPv4gw "$(printf ${route#*via })"
+
+    if ! valid_ip "${IPv4bare}" ; then
+        IPv4bare="127.0.0.1"
+    fi
+
+    # Append the CIDR notation to the IP address, if valid_ip fails this should return 127.0.0.1/8
+    IPV4_ADDRESS=$(ip -oneline -family inet address show | grep "${IPv4bare}/" |  awk '{print $4}' | awk 'END {print}')
+}
+
+valid_ip() {
+    # Local, named variables
+    local ip=${1}
+    local stat=1
+
+    # One IPv4 element is 8bit: 0 - 256
+    local ipv4elem="(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]?|0)";
+    # optional port number starting '#' with range of 1-65536
+    local portelem="(#([1-9]|[1-8][0-9]|9[0-9]|[1-8][0-9]{2}|9[0-8][0-9]|99[0-9]|[1-8][0-9]{3}|9[0-8][0-9]{2}|99[0-8][0-9]|999[0-9]|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-6]))?"
+    # build a full regex string from the above parts
+    local regex="^${ipv4elem}\.${ipv4elem}\.${ipv4elem}\.${ipv4elem}${portelem}$"
+
+    [[ $ip =~ ${regex} ]]
+
+    stat=$?
+    # Return the exit code
+    return "${stat}"
 }
 
 # ROOT/SUDO CHECK
@@ -57,6 +105,11 @@ mkdir -p ${installDir}/{conf,db}
 # SCRIPT STARTUP
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] Automated Installer v$ver" 2>&1 | tee -a $logFile
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] Installing: revoke" 2>&1 | tee -a $logFile
+
+# GET NETWORK DETAILS
+find_IPv4_information
+IPADDR=${IPV4_ADDRESS%%/*}
+CIDR=${IPV4_ADDRESS##*/}
 
 # OPERATING SYSTEM CHECK
 
