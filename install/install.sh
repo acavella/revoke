@@ -32,7 +32,16 @@ REVOKE_DEPS=(sqlite3 curl openssl httpd)
 INSTALL_DEPS=(tar)
 IPV4_ADDRESS=${IPV4_ADDRESS}
 
-
+# COLOR TABLE
+    COL_NC='\e[0m' # No Color
+    COL_LIGHT_GREEN='\e[1;32m'
+    COL_LIGHT_RED='\e[1;31m'
+    TICK="[${COL_LIGHT_GREEN}✓${COL_NC}]"
+    CROSS="[${COL_LIGHT_RED}✗${COL_NC}]"
+    INFO="[i]"
+    # shellcheck disable=SC2034
+    DONE="${COL_LIGHT_GREEN} done!${COL_NC}"
+    OVER="\\r\\033[K"
 
 is_command() {
     # Checks for existence of string passed in as only function argument.
@@ -112,7 +121,6 @@ IPADDR=${IPV4_ADDRESS%%/*}
 CIDR=${IPV4_ADDRESS##*/}
 
 # OPERATING SYSTEM CHECK
-
 if [ -f "/etc/os-release" ]; then
     rel="/etc/os-release"
 else
