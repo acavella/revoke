@@ -20,7 +20,7 @@ ver="0.1"
 confFile="${__conf}/install.conf"
 installDir="/usr/local/bin/revoke"
 dbDir="/usr/local/bin/revoke/db"
-wwwDir="/var/www/html/revoke"
+wwwDir="/var/www/revoke"
 logFile="${installDir}/install.log"
 printDTG=$(date '+%Y-%m-%d %H:%M:%S')
 fileDTG=$(date '+%Y%m%d-%H%M%S')
@@ -42,6 +42,41 @@ IPV4_ADDRESS=${IPV4_ADDRESS}
     # shellcheck disable=SC2034
     DONE="${COL_LIGHT_GREEN} done!${COL_NC}"
     OVER="\\r\\033[K"
+
+# Simple function to echo logo
+show_ascii_logo() {
+    echo -e "
+    
+            MMMMMMMMMMMMMMM             
+         MMMMMMMMMMMMMMMM               
+      .MMMMMMMI        .                
+     MMMMMM                      ~MM    
+   =MMMMM                       MMMMM,  
+  DMMMM                       MMMMMM    
+  MMMM                       MMMMM      
+ MMMM                      MMMMMM       
+MMMMM                    ~MMMMM         
+MMMM                    MMMMMD          
+MMMM      MMM         MMMMMM            
+MMM~     MMMMM       MMMMM              
+MMM~      MMMMMM   MMMMMM          =MMMI
+MMMM        MMMMM=MMMMM            MMMM 
+MMMM.        =MMMMMMM:             MMMM 
+MMMMM          MMMMM              ,MMMM 
+ MMMM            M                MMMM  
+  MMMM                           MMMM   
+  DMMMM                         MMMMD   
+   =MMMMM                     MMMMM=    
+     MMMMMM                 MMMMMM      
+      .MMMMMMMI         :MMMMMMM.       
+         MMMMMMMMMMMMMMMMMMMMM          
+            MMMMMMMMMMMMMMM             
+                . ?M?                 
+
+revoke // simple crl fetching and hosting
+
+"
+}
 
 is_command() {
     # Checks for existence of string passed in as only function argument.
@@ -99,13 +134,64 @@ valid_ip() {
     return "${stat}"
 }
 
-# ROOT/SUDO CHECK
-if [ "$EUID" -ne 0 ] ; then 
-    echo "[$(date '+%Y-%m-%d %H:%M:%S')] [error] Installation must be executed as root or sudo, exiting." 2>&1 | tee -a $logFile
-    exit
-else 
-    echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] Installation executed as root or sudo." 2>&1 | tee -a $logFile
-fi
+# Enable service so that it will start with next reboot
+enable_service() {
+    # Local, named variables
+    local str="Enabling ${1} service to start on reboot"
+    printf "  %b %s..." "${INFO}" "${str}"
+    # If systemctl exists,
+    if is_command systemctl ; then
+        # use that to enable the service
+        systemctl enable "${1}" &> /dev/null
+    # Otherwise,
+    else
+        # use update-rc.d to accomplish this
+        update-rc.d "${1}" defaults &> /dev/null
+    fi
+    printf "%b  %b %s...\\n" "${OVER}" "${TICK}" "${str}"
+}
+
+# Start/Restart service passed in as argument
+restart_service() {
+    # Local, named variables
+    local str="Restarting ${1} service"
+    printf "  %b %s..." "${INFO}" "${str}"
+    # If systemctl exists,
+    if is_command systemctl ; then
+        # use that to restart the service
+        systemctl restart "${1}" &> /dev/null
+    # Otherwise,
+    else
+        # fall back to the service command
+        service "${1}" restart &> /dev/null
+    fi
+    printf "%b  %b %s...\\n" "${OVER}" "${TICK}" "${str}"
+}
+
+check_privilege() {
+    # Must be root to install
+    local str="Root user check"
+    printf "\\n"
+
+    # If the user's id is zero,
+    if [[ "${EUID}" -eq 0 ]]; then
+        # they are root and all is good
+        printf "  %b %s\\n" "${TICK}" "${str}"
+        # Show the Pi-hole logo so people know it's genuine since the logo and name are trademarked
+        
+    # Otherwise,
+    else
+        # They do not have enough privileges, so let the user know
+        printf "  %b %s\\n" "${CROSS}" "${str}"
+        printf "  %b %bScript called with non-root privileges%b\\n" "${INFO}" "${COL_LIGHT_RED}" "${COL_NC}"
+        printf "      Revoke requires elevated privileges to install and run\\n\\n"
+    fi
+}
+
+main() {
+
+    show_ascii_logo
+    
 
 # CREATE DIRECTORIES
 mkdir -p ${installDir}
@@ -183,6 +269,15 @@ CREATE TABLE crlList (
 END_SQL
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] Database initialization completed." 2>&1 | tee -a $logFile
 
-# INSTALL WEBSERVER
+# Configure Apache HTTPD webserver
+    # Install virtual host configuration
+    {
+        echo "<VirtualHost ${IPADDR}:80>"
+        echo "ServerName "
+        echo "DocumentRoot \"${wwwDir}\""
+        echo "</VirtualHost>"
+    }>/etc/httpd/conf.d/revoke.conf
 
-
+    enable_service httpd
+    restart_service httpd
+}
