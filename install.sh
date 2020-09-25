@@ -207,9 +207,9 @@ find_os() {
 
     for i in ${supportedOS[@]}; do 
         if [ "$detectedOS" = "$i" ]; then
-            echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] Operating System detected: ${detected_os_pretty}" 2>&1 | tee -a $logFile
+            printf "  %b %bSupported OS detected%b\\n" "${TICK}" "${COL_LIGHT_GREEN}" "${COL_NC}"
         else
-            echo "[$(date '+%Y-%m-%d %H:%M:%S')] [error] ${detected_os_pretty} is not currently supported, exiting." 2>&1 | tee -a $logFile
+            printf "  %b %bUnsupported OS detected: %s%b\\n" "${CROSS}" "${COL_LIGHT_RED}" "${detected_os_pretty}" "${COL_NC}"
             exit 1
         fi
     done
