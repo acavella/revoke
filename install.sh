@@ -73,7 +73,7 @@ MMMMM          MMMMM              ,MMMM
             MMMMMMMMMMMMMMM             
                 . ?M?                 
 
-revoke // simple crl fetching and hosting
+revoke // crl fetching and hosting simplified
 
 Automated installation and configuration:"
 }
@@ -132,6 +132,17 @@ valid_ip() {
     stat=$?
     # Return the exit code
     return "${stat}"
+}
+
+# Create required installation directories
+create_directories() {
+    # Local, named variables
+    local str="Creating installation directories"
+    printf "  %b %s..." "${INFO}" "${str}"
+    install -d -m 755 ${installDir}
+    mkdir -p ${installDir}/{conf,db}
+    pause 
+    printf "%b  %b %s...\\n" "${OVER}" "${TICK}" "${str}"
 }
 
 # Enable service so that it will start with next reboot
@@ -266,15 +277,8 @@ main() {
     check_privilege
     check_os
     get_package_manager
+    create_directories
 
-
-# CREATE DIRECTORIES
-mkdir -p ${installDir}
-mkdir -p ${installDir}/{conf,db}
-
-# SCRIPT STARTUP
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] Automated Installer v$ver" 2>&1 | tee -a $logFile
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] Installing: revoke" 2>&1 | tee -a $logFile
 
 # GET NETWORK DETAILS
 find_IPv4_information
