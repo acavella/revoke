@@ -87,7 +87,7 @@ is_command() {
     command -v "${check_command}" >/dev/null 2>&1
 }
 
-find_IPv4_information() {
+get_IPv4_information() {
     # Detects IPv4 address used for communication to WAN addresses.
     # Accepts no arguments, returns no values.
 
@@ -113,6 +113,8 @@ find_IPv4_information() {
 
     # Append the CIDR notation to the IP address, if valid_ip fails this should return 127.0.0.1/8
     IPV4_ADDRESS=$(ip -oneline -family inet address show | grep "${IPv4bare}/" |  awk '{print $4}' | awk 'END {print}')
+    IPADDR=${IPV4_ADDRESS%%/*}
+    CIDR=${IPV4_ADDRESS##*/}
 }
 
 valid_ip() {
@@ -285,6 +287,10 @@ copy_to_install_log() {
     chmod 644 "${installLog}"
 }
 
+get_user_details() {
+
+}
+
 
 main() {
 
@@ -292,14 +298,13 @@ main() {
     check_privilege
     check_os
     get_package_manager
+    get_IPv4_information
     create_install_directory
     create_db
 
-
-# GET NETWORK DETAILS
-find_IPv4_information
-IPADDR=${IPV4_ADDRESS%%/*}
-CIDR=${IPV4_ADDRESS##*/}
+    # GET NETWORK DETAILS
+    
+    
 
 
 # DEPENDENCY CHECK
