@@ -223,11 +223,30 @@ check_os() {
     fi    
 }
 
+get_package_manager() {
+
+    # Check for common package managers per OS
+    if [ "$detectedOS" = "Fedora" ] || [ "$detectedOS" = "CentOS" ]; then
+        if is_command dnf ; then
+            PKG_MGR="dnf" # set to dnf
+            printf "  %b %bPackage manager: %s%b\\n" "${TICK}" "${COL_LIGHT_GREEN}" "${PKG_MGR}" "${COL_NC}"
+        elif is_command yum ; then
+            PKG_MGR="yum" # set to yum
+            printf "  %b %bPackage manager: %s%b\\n" "${TICK}" "${COL_LIGHT_GREEN}" "${PKG_MGR}" "${COL_NC}"
+        else
+            # unable to detect a common yum based package manager
+            printf "  %b %bSupported package manager not found%b\\n" "${CROSS}" "${COL_LIGHT_RED}" "${COL_NC}"
+        fi
+    fi
+
+}
+
 main() {
 
     show_ascii_logo
     check_privilege
     check_os
+    get_package_manager
 
 
 # CREATE DIRECTORIES
@@ -244,19 +263,6 @@ IPADDR=${IPV4_ADDRESS%%/*}
 CIDR=${IPV4_ADDRESS##*/}
 
 
-
-# PACKAGE MANAGER CHECK
-if [ "$detectedOS" = "Fedora" ] || [ "$detectedOS" = "CentOS" ]; then
-    if is_command dnf ; then
-        PKG_MANAGER="dnf"
-    else
-        PKG_MANAGER="yum"
-    fi
-    echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] Package Manager detected: $PKG_MANAGER" 2>&1 | tee -a $logFile
-else
-    echo "[$(date '+%Y-%m-%d %H:%M:%S')] [error] Unable to detect appropriate package manager." 2>&1 | tee -a $logFile
-fi
-
 # DEPENDENCY CHECK
 for i in "${REVOKE_DEPS[@]}"
 do
@@ -264,7 +270,7 @@ do
         echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] Dependency satisfied: ${i}" 2>&1 | tee -a $logFile
     else
         echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] Installing dependency: ${i}" 2>&1 | tee -a $logFile
-        ${PKG_MANAGER} install ${i} -y &> /dev/null
+        ${PKG_MGR} install ${i} -y &> /dev/null
         if [ $? = 0 ]
         then
             echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] Dependency installed: ${i}" 2>&1 | tee -a $logFile
