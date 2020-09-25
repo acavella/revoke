@@ -135,7 +135,7 @@ valid_ip() {
 }
 
 # Create required installation directories
-create_directories() {
+create_install_directory() {
     # Local, named variables
     local str="Creating installation directories"
     printf "  %b %s..." "${INFO}" "${str}"
@@ -277,7 +277,7 @@ main() {
     check_privilege
     check_os
     get_package_manager
-    create_directories
+    create_install_directory
 
 
 # GET NETWORK DETAILS
