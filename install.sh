@@ -190,7 +190,10 @@ find_os() {
     # Check for /etc/os-release
     local rel="/etc/os-release"
     if [ -f ${rel} ]; then
-        :
+        # Set OS values from /etc/os-release
+        detected_os_pretty=$(cat ${rel} | grep PRETTY_NAME | cut -d '=' -f2- | tr -d '"') # Full OS name with version
+        detectedOS="${detected_os_pretty%% *}" # OS name only
+        detected_version=$(cat ${rel} | grep VERSION_ID | cut -d '=' -f2- | tr -d '"') # OS version number
     # Recommend manual installation if os can't be determined
     else
         printf "  %b %bUnable to locate: %s%b\\n" "${CROSS}" "${COL_LIGHT_RED}" "${rel}" "${COL_NC}"
@@ -201,20 +204,22 @@ find_os() {
         exit 1
     fi
 
-    # Set OS values from /etc/os-release
-    detected_os_pretty=$(cat ${rel} | grep PRETTY_NAME | cut -d '=' -f2- | tr -d '"') # Full OS name with version
-    detectedOS="${detected_os_pretty%% *}" # OS name only
-    detected_version=$(cat ${rel} | grep VERSION_ID | cut -d '=' -f2- | tr -d '"') # OS version number
+
 
     # Iterate through suppported OS array
+    supported_os_detected=0
     for i in ${supportedOS[@]}; do 
         if [ "$detectedOS" = "$i" ]; then
-            printf "  %b %bSupported OS detected%b\\n" "${TICK}" "${COL_LIGHT_GREEN}" "${COL_NC}"
-        else
-            printf "  %b %bUnsupported OS detected: %s%b\\n" "${CROSS}" "${COL_LIGHT_RED}" "${detected_os_pretty}" "${COL_NC}"
-            exit 1
+            supported_os_detected=1
         fi
     done
+    
+    if [ ${supported_os_detected} = "1" ]; then
+        printf "  %b %bSupported OS detected%b\\n" "${TICK}" "${COL_LIGHT_GREEN}" "${COL_NC}"
+    else
+        printf "  %b %bUnsupported OS detected: %s%b\\n" "${CROSS}" "${COL_LIGHT_RED}" "${detected_os_pretty}" "${COL_NC}"
+        exit 1
+    fi    
 }
 
 main() {
