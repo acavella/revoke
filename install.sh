@@ -201,10 +201,12 @@ find_os() {
         exit 1
     fi
 
-    detected_os_pretty=$(cat ${rel} | grep PRETTY_NAME | cut -d '=' -f2- | tr -d '"')
-    detectedOS="${detected_os_pretty%% *}"
-    detected_version=$(cat ${rel} | grep VERSION_ID | cut -d '=' -f2- | tr -d '"')
+    # Set OS values from /etc/os-release
+    detected_os_pretty=$(cat ${rel} | grep PRETTY_NAME | cut -d '=' -f2- | tr -d '"') # Full OS name with version
+    detectedOS="${detected_os_pretty%% *}" # OS name only
+    detected_version=$(cat ${rel} | grep VERSION_ID | cut -d '=' -f2- | tr -d '"') # OS version number
 
+    # Iterate through suppported OS array
     for i in ${supportedOS[@]}; do 
         if [ "$detectedOS" = "$i" ]; then
             printf "  %b %bSupported OS detected%b\\n" "${TICK}" "${COL_LIGHT_GREEN}" "${COL_NC}"
@@ -219,6 +221,8 @@ main() {
 
     show_ascii_logo
     check_privilege
+    find_os
+
 
 # CREATE DIRECTORIES
 mkdir -p ${installDir}
