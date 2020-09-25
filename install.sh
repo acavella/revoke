@@ -94,6 +94,9 @@ get_IPv4_information() {
     # Named, local variables
     local route
     local IPv4bare
+    local str="Gathering IPv4 details"
+
+    printf "  %b %s..." "${INFO}" "${str}"
 
     # Find IP used to route to outside world by checking the the route to Google's public DNS server
     route=$(ip route get 8.8.8.8)
@@ -115,6 +118,8 @@ get_IPv4_information() {
     IPV4_ADDRESS=$(ip -oneline -family inet address show | grep "${IPv4bare}/" |  awk '{print $4}' | awk 'END {print}')
     IPADDR=${IPV4_ADDRESS%%/*}
     CIDR=${IPV4_ADDRESS##*/}
+    
+    printf "%b  %b %s...\\n" "${OVER}" "${TICK}" "${str}"
 }
 
 valid_ip() {
@@ -299,11 +304,12 @@ main() {
     check_os
     get_package_manager
     get_IPv4_information
+
+
     create_install_directory
     create_db
 
-    # GET NETWORK DETAILS
-    
+ 
     
 
 
