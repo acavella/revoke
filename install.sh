@@ -186,7 +186,7 @@ check_privilege() {
     fi
 }
 
-find_os() {
+check_os() {
     # Check for /etc/os-release
     local rel="/etc/os-release"
     if [ -f ${rel} ]; then
@@ -204,19 +204,20 @@ find_os() {
         exit 1
     fi
 
-
-
     # Iterate through suppported OS array
     supported_os_detected=0
     for i in ${supportedOS[@]}; do 
         if [ "$detectedOS" = "$i" ]; then
-            supported_os_detected=1
+            supported_os_detected=1 # Set to 1 if a match is found in supported OS array
         fi
     done
     
+    # Supported OS resulting action
     if [ ${supported_os_detected} = "1" ]; then
+        # Notify of supported OS and continue
         printf "  %b %bSupported OS detected%b\\n" "${TICK}" "${COL_LIGHT_GREEN}" "${COL_NC}"
     else
+        # Notify of unsupported OS and exit
         printf "  %b %bUnsupported OS detected: %s%b\\n" "${CROSS}" "${COL_LIGHT_RED}" "${detected_os_pretty}" "${COL_NC}"
         exit 1
     fi    
@@ -226,7 +227,7 @@ main() {
 
     show_ascii_logo
     check_privilege
-    find_os
+    check_os
 
 
 # CREATE DIRECTORIES
