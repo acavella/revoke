@@ -118,7 +118,7 @@ get_IPv4_information() {
     IPV4_ADDRESS=$(ip -oneline -family inet address show | grep "${IPv4bare}/" |  awk '{print $4}' | awk 'END {print}')
     IPADDR=${IPV4_ADDRESS%%/*}
     CIDR=${IPV4_ADDRESS##*/}
-    
+
     printf "%b  %b %s...\\n" "${OVER}" "${TICK}" "${str}"
 }
 
@@ -292,8 +292,32 @@ copy_to_install_log() {
     chmod 644 "${installLog}"
 }
 
-get_user_details() {
+install_dependencies() {
+    for i in "${REVOKE_DEPS[@]}"
+    do
+        if is_command ${i}; then
+            printf "  %b %bDependency found: %s%b\\n" "${TICK}" "${COL_LIGHT_GREEN}" "${i}" "${COL_NC}"
+        else
+            local str="Installing dependency: ${i}"
+            printf "  %b %s" "${INFO}" "${str}"
+            ${PKG_MGR} install ${i} -y &> /dev/null
+            if [ $? = 0 ]
+            then
+                printf "%b  %b %s\\n" "${OVER}" "${TICK}" "${str}"
+            else
+                printf "%b  %b %s\\n" "${OVER}" "${CROSS}" "${str}"
+                printf "      Dependency install failed, exiting.\\n\\n"
+                exit 1
+            fi
+        fi
+    done
+}
 
+get_user_details() {
+    local str="Collecting user feedback/variables"
+    printf "  %b %s..." "${INFO}" "${str}"
+
+    printf "%b  %b %s...\\n" "${OVER}" "${TICK}" "${str}"
 }
 
 
@@ -302,7 +326,9 @@ main() {
     show_ascii_logo
     check_privilege
     check_os
+
     get_package_manager
+    
     get_IPv4_information
 
 
@@ -310,9 +336,6 @@ main() {
     create_db
 
  
-    
-
-
 # DEPENDENCY CHECK
 for i in "${REVOKE_DEPS[@]}"
 do
@@ -329,19 +352,6 @@ do
         fi
     fi
 done
-
-# INITIALIZE DATABASE
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] Initializing SQLite database." 2>&1 | tee -a $logFile
-sqlite3 ${dbDir}/revoke.db <<'END_SQL'
-CREATE TABLE crlList (
-        Row_ID integer PRIMARY KEY AUTOINCREMENT,
-        CRL_Uri text,
-        CRL_Name text,
-        CRL_Hash text,
-        CRL_Date text
-);
-END_SQL
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] Database initialization completed." 2>&1 | tee -a $logFile
 
 # Configure Apache HTTPD webserver
     # Install virtual host configuration
