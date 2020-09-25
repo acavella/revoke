@@ -176,9 +176,7 @@ check_privilege() {
     # If the user's id is zero,
     if [[ "${EUID}" -eq 0 ]]; then
         # they are root and all is good
-        printf "  %b %s\\n" "${TICK}" "${str}"
-        # Show the Pi-hole logo so people know it's genuine since the logo and name are trademarked
-        
+        printf "  %b %s\\n" "${TICK}" "${str}"     
     # Otherwise,
     else
         # They do not have enough privileges, so let the user know
@@ -188,10 +186,39 @@ check_privilege() {
     fi
 }
 
+find_os() {
+    # Check for /etc/os-release
+    local rel="/etc/os-release"
+    if [ -f ${rel} ]; then
+        :
+    # Recommend manual installation if os can't be determined
+    else
+        printf "  %b %bUnable to locate: %s%b\\n" "${CROSS}" "${COL_LIGHT_RED}" "${rel}" "${COL_NC}"
+        printf "      Please refer to manual installaltion, insructrions\\n"
+        printf "      can be found at the following link:\\n"
+        printf "      https://github.com/altcipher/revoke/readme.md\\n"
+        printf "\\n"
+        exit 1
+    fi
+
+    detected_os_pretty=$(cat ${rel} | grep PRETTY_NAME | cut -d '=' -f2- | tr -d '"')
+    detectedOS="${detected_os_pretty%% *}"
+    detected_version=$(cat ${rel} | grep VERSION_ID | cut -d '=' -f2- | tr -d '"')
+
+    for i in ${supportedOS[@]}; do 
+        if [ "$detectedOS" = "$i" ]; then
+            echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] Operating System detected: ${detected_os_pretty}" 2>&1 | tee -a $logFile
+        else
+            echo "[$(date '+%Y-%m-%d %H:%M:%S')] [error] ${detected_os_pretty} is not currently supported, exiting." 2>&1 | tee -a $logFile
+            exit 1
+        fi
+    done
+}
+
 main() {
 
     show_ascii_logo
-    
+    check_privilege
 
 # CREATE DIRECTORIES
 mkdir -p ${installDir}
@@ -206,26 +233,7 @@ find_IPv4_information
 IPADDR=${IPV4_ADDRESS%%/*}
 CIDR=${IPV4_ADDRESS##*/}
 
-# OPERATING SYSTEM CHECK
-if [ -f "/etc/os-release" ]; then
-    rel="/etc/os-release"
-else
-    echo "[$(date '+%Y-%m-%d %H:%M:%S')] [error] Unable to determine OS version, automated installation exiting." 2>&1 | tee -a $logFile
-    exit 1
-fi
 
-detected_os_pretty=$(cat ${rel} | grep PRETTY_NAME | cut -d '=' -f2- | tr -d '"')
-detectedOS="${detected_os_pretty%% *}"
-detected_version=$(cat ${rel} | grep VERSION_ID | cut -d '=' -f2- | tr -d '"')
-
-for i in ${supportedOS[@]}; do 
-    if [ "$detectedOS" = "$i" ]; then
-        echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] Operating System detected: ${detected_os_pretty}" 2>&1 | tee -a $logFile
-    else
-        echo "[$(date '+%Y-%m-%d %H:%M:%S')] [error] ${detected_os_pretty} is not currently supported, exiting." 2>&1 | tee -a $logFile
-        exit
-    fi
-done
 
 # PACKAGE MANAGER CHECK
 if [ "$detectedOS" = "Fedora" ] || [ "$detectedOS" = "CentOS" ]; then
