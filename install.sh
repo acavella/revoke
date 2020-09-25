@@ -75,7 +75,7 @@ MMMMM          MMMMM              ,MMMM
 
 revoke // simple crl fetching and hosting
 
-"
+Automated installation and configuration:"
 }
 
 is_command() {
@@ -171,8 +171,6 @@ restart_service() {
 check_privilege() {
     # Must be root to install
     local str="Root user check"
-    printf "\\n"
-
     # If the user's id is zero,
     if [[ "${EUID}" -eq 0 ]]; then
         # they are root and all is good
