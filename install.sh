@@ -134,6 +134,22 @@ valid_ip() {
     return "${stat}"
 }
 
+create_db() {
+    local str="Creating SQLite database and building table"
+    # INITIALIZE DATABASE
+    printf "  %b %s..." "${INFO}" "${str}"
+    sqlite3 ${dbDir}/revoke.db <<'END_SQL'
+        CREATE TABLE crlList (
+        Row_ID integer PRIMARY KEY AUTOINCREMENT,
+        CRL_Uri text,
+        CRL_Name text,
+        CRL_Hash text,
+        CRL_Date text
+        );
+END_SQL
+    printf "%b  %b %s...\\n" "${OVER}" "${TICK}" "${str}"
+}
+
 # Create required installation directories
 create_install_directory() {
     # Local, named variables
@@ -141,7 +157,6 @@ create_install_directory() {
     printf "  %b %s..." "${INFO}" "${str}"
     install -d -m 755 ${installDir}
     mkdir -p ${installDir}/{conf,db}
-    pause 
     printf "%b  %b %s...\\n" "${OVER}" "${TICK}" "${str}"
 }
 
@@ -278,6 +293,7 @@ main() {
     check_os
     get_package_manager
     create_install_directory
+    create_db
 
 
 # GET NETWORK DETAILS
