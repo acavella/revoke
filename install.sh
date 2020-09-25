@@ -241,6 +241,27 @@ get_package_manager() {
 
 }
 
+make_temporary_log() {
+    # Create a random temporary file for the log
+    TEMPLOG=$(mktemp /tmp/pihole_temp.XXXXXX)
+    # Open handle 3 for templog
+    # https://stackoverflow.com/questions/18460186/writing-outputs-to-log-file-and-console
+    exec 3>"$TEMPLOG"
+    # Delete templog, but allow for addressing via file handle
+    # This lets us write to the log without having a temporary file on the drive, which
+    # is meant to be a security measure so there is not a lingering file on the drive during the install process
+    rm "$TEMPLOG"
+}
+
+copy_to_install_log() {
+    # Copy the contents of file descriptor 3 into the install log
+    # Since we use color codes such as '\e[1;33m', they should be removed
+    touch ${installLog}
+    sed 's/\[[0-9;]\{1,5\}m//g' < /proc/$$/fd/3 > "${installLog}"
+    chmod 644 "${installLog}"
+}
+
+
 main() {
 
     show_ascii_logo
