@@ -22,6 +22,8 @@ set -u
 # For better maintainability, we store as much information that can change in variables
 # These variables should all be GLOBAL variables, written in CAPS
 # Local variables will be in lowercase and will exist only within functions
+
+# Base directories
 __dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 __bin="${__dir}/bin"
 __conf="${__dir}/conf"
@@ -37,8 +39,8 @@ fileDTG=$(date '+%Y%m%d-%H%M%S')
 
 
 
-supportedOS=("Fedora" "CentOS")
-REVOKE_DEPS=(sqlite3 curl openssl httpd) 
+SUPPORTED_OS=("Fedora" "CentOS")
+REVOKE_DEPS=(sqlite curl openssl httpd) 
 
 # COLOR TABLE
     COL_NC='\e[0m' # No Color
@@ -245,7 +247,7 @@ check_os() {
 
     # Iterate through suppported OS array
     supported_os_detected=0
-    for i in ${supportedOS[@]}; do 
+    for i in ${SUPPORTED_OS[@]}; do 
         if [ "$detectedOS" = "$i" ]; then
             supported_os_detected=1 # Set to 1 if a match is found in supported OS array
         fi
