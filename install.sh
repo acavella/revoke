@@ -28,30 +28,29 @@ __dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 __bin="${__dir}/bin"
 __conf="${__dir}/conf"
 
-ver="0.1"
-confFile="${__conf}/install.conf"
-installDir="/usr/local/bin/revoke"
-dbDir="/usr/local/bin/revoke/db"
-wwwDir="/var/www/revoke"
-logFile="${installDir}/install.log"
-printDTG=$(date '+%Y-%m-%d %H:%M:%S')
-fileDTG=$(date '+%Y%m%d-%H%M%S')
-
-
+# Global variables
+SCRIPT_VERSION="0.1"
+INSTALL_CONFIG="${__conf}/install.conf"
+INSTALL_DIR="/usr/local/bin/revoke"
+DB_DIR="/usr/local/bin/revoke/db"
+WWW_DIR="/var/www/revoke"
+INSTALL_LOG="${INSTALL_DIR}/install.log"
+DTG_PRINT=$(date '+%Y-%m-%d %H:%M:%S')
+DTG_FILE=$(date '+%Y%m%d-%H%M%S')
 
 SUPPORTED_OS=("Fedora" "CentOS")
 REVOKE_DEPS=(sqlite curl openssl httpd) 
 
-# COLOR TABLE
-    COL_NC='\e[0m' # No Color
-    COL_LIGHT_GREEN='\e[1;32m'
-    COL_LIGHT_RED='\e[1;31m'
-    TICK="[${COL_LIGHT_GREEN}✓${COL_NC}]"
-    CROSS="[${COL_LIGHT_RED}✗${COL_NC}]"
-    INFO="[i]"
-    # shellcheck disable=SC2034
-    DONE="${COL_LIGHT_GREEN} done!${COL_NC}"
-    OVER="\\r\\033[K"
+# Color Table
+COL_NC='\e[0m' # No Color
+COL_LIGHT_GREEN='\e[1;32m'
+COL_LIGHT_RED='\e[1;31m'
+TICK="[${COL_LIGHT_GREEN}✓${COL_NC}]"
+CROSS="[${COL_LIGHT_RED}✗${COL_NC}]"
+INFO="[i]"
+# shellcheck disable=SC2034
+DONE="${COL_LIGHT_GREEN} done!${COL_NC}"
+OVER="\\r\\033[K"
 
 # Simple function to echo logo
 show_ascii_logo() {
@@ -155,7 +154,7 @@ create_db() {
     local str="Creating SQLite database and building table"
     # INITIALIZE DATABASE
     printf "  %b %s..." "${INFO}" "${str}"
-    sqlite3 ${dbDir}/revoke.db <<'END_SQL'
+    sqlite3 ${DB_DIR}/revoke.db <<'END_SQL'
         CREATE TABLE crlList (
         Row_ID integer PRIMARY KEY AUTOINCREMENT,
         CRL_Uri text,
@@ -172,8 +171,8 @@ create_install_directory() {
     # Local, named variables
     local str="Creating installation directories"
     printf "  %b %s..." "${INFO}" "${str}"
-    install -d -m 755 ${installDir}
-    mkdir -p ${installDir}/{conf,db}
+    install -d -m 755 ${INSTALL_DIR}
+    mkdir -p ${INSTALL_DIR}/{conf,db}
     printf "%b  %b %s...\\n" "${OVER}" "${TICK}" "${str}"
 }
 
@@ -256,7 +255,7 @@ check_os() {
     # Supported OS resulting action
     if [ ${supported_os_detected} = "1" ]; then
         # Notify of supported OS and continue
-        printf "  %b %bSupported OS detected%b\\n" "${TICK}" "${COL_LIGHT_GREEN}" "${COL_NC}"
+        printf "  %b Supported OS detected\\n" "${TICK}"
     else
         # Notify of unsupported OS and exit
         printf "  %b %bUnsupported OS detected: %s%b\\n" "${CROSS}" "${COL_LIGHT_RED}" "${detected_os_pretty}" "${COL_NC}"
@@ -270,10 +269,10 @@ get_package_manager() {
     if [ "$detectedOS" = "Fedora" ] || [ "$detectedOS" = "CentOS" ]; then
         if is_command dnf ; then
             PKG_MGR="dnf" # set to dnf
-            printf "  %b %bPackage manager: %s%b\\n" "${TICK}" "${COL_LIGHT_GREEN}" "${PKG_MGR}" "${COL_NC}"
+            printf "  %b Package manager: %s\\n" "${TICK}" "${PKG_MGR}"
         elif is_command yum ; then
             PKG_MGR="yum" # set to yum
-            printf "  %b %bPackage manager: %s%b\\n" "${TICK}" "${COL_LIGHT_GREEN}" "${PKG_MGR}" "${COL_NC}"
+            printf "  %b Package manager: %s\\n" "${TICK}" "${PKG_MGR}"
         else
             # unable to detect a common yum based package manager
             printf "  %b %bSupported package manager not found%b\\n" "${CROSS}" "${COL_LIGHT_RED}" "${COL_NC}"
@@ -306,7 +305,7 @@ install_dependencies() {
     for i in "${REVOKE_DEPS[@]}"
     do
         if is_command ${i}; then
-            printf "  %b %bDependency found: %s%b\\n" "${TICK}" "${COL_LIGHT_GREEN}" "${i}" "${COL_NC}"
+            printf "  %b Dependency found: %s\\n" "${TICK}" "${i}" 
         else
             local str="Installing dependency: ${i}"
             printf "  %b %s" "${INFO}" "${str}"
@@ -338,7 +337,7 @@ main() {
     check_os
 
     get_package_manager
-    
+    install_dependencies
     get_IPv4_information
 
 
@@ -350,15 +349,15 @@ main() {
 for i in "${REVOKE_DEPS[@]}"
 do
     if is_command ${i}; then
-        echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] Dependency satisfied: ${i}" 2>&1 | tee -a $logFile
+        echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] Dependency satisfied: ${i}" 2>&1 | tee -a $INSTALL_LOG
     else
-        echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] Installing dependency: ${i}" 2>&1 | tee -a $logFile
+        echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] Installing dependency: ${i}" 2>&1 | tee -a $INSTALL_LOG
         ${PKG_MGR} install ${i} -y &> /dev/null
         if [ $? = 0 ]
         then
-            echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] Dependency installed: ${i}" 2>&1 | tee -a $logFile
+            echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] Dependency installed: ${i}" 2>&1 | tee -a $INSTALL_LOG
         else
-            echo "[$(date '+%Y-%m-%d %H:%M:%S')] [error] Unable to install dependency: ${i}" 2>&1 | tee -a $logFile
+            echo "[$(date '+%Y-%m-%d %H:%M:%S')] [error] Unable to install dependency: ${i}" 2>&1 | tee -a $INSTALL_LOG
         fi
     fi
 done
@@ -368,7 +367,7 @@ done
     {
         echo "<VirtualHost ${IPADDR}:80>"
         echo "ServerName "
-        echo "DocumentRoot \"${wwwDir}\""
+        echo "DocumentRoot \"${WWW_DIR}\""
         echo "</VirtualHost>"
     }>/etc/httpd/conf.d/revoke.conf
 
