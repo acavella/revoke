@@ -1,17 +1,27 @@
 #!/usr/bin/env bash
 
-# NAME: install.sh
-# DECRIPTION: Performs automated installation of revoke cdp
-# AUTHOR: Tony Cavella (tony@cavella.com)
-# SOURCE: https://github.com/altCipher/revoke
+# Revoke: CRL fetching and hosting made simple
+# (c) 2018 - 2019 Tony Cavella (https://github.com/altCipher/revoke)
+# A script to retrieve and host CRL files.
+#
+# Automatic install and configuration of Revoke.
+#
+# This file is copyright under the latest version of the GPLv3.
+# Please see LICENSE file for your rights under this license.
 
-## CONFIGURE DEFAULT ENVIRONMENT
-set -o errexit
-set -o pipefail
-set -o nounset
-#set -o xtrace
+# Install with this command (from your Linux machine):
+#
+# curl -sSL https://install.pi-hole.net | bash
 
-## VARIABLES
+# -e option instructs bash to immediately exit if any command [1] has a non-zero exit status
+# -u option instructs bash to exit on unset variables (useful for debugging)
+set -e
+set -u
+
+######## VARIABLES #########
+# For better maintainability, we store as much information that can change in variables
+# These variables should all be GLOBAL variables, written in CAPS
+# Local variables will be in lowercase and will exist only within functions
 __dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 __bin="${__dir}/bin"
 __conf="${__dir}/conf"
@@ -29,8 +39,6 @@ fileDTG=$(date '+%Y%m%d-%H%M%S')
 
 supportedOS=("Fedora" "CentOS")
 REVOKE_DEPS=(sqlite3 curl openssl httpd) 
-INSTALL_DEPS=(tar)
-IPV4_ADDRESS=${IPV4_ADDRESS}
 
 # COLOR TABLE
     COL_NC='\e[0m' # No Color
@@ -47,33 +55,33 @@ IPV4_ADDRESS=${IPV4_ADDRESS}
 show_ascii_logo() {
     echo -e "
     
-            MMMMMMMMMMMMMMM             
-         MMMMMMMMMMMMMMMM               
-      .MMMMMMMI        .                
-     MMMMMM                      ~MM    
-   =MMMMM                       MMMMM,  
-  DMMMM                       MMMMMM    
-  MMMM                       MMMMM      
- MMMM                      MMMMMM       
-MMMMM                    ~MMMMM         
-MMMM                    MMMMMD          
-MMMM      MMM         MMMMMM            
-MMM~     MMMMM       MMMMM              
-MMM~      MMMMMM   MMMMMM          =MMMI
-MMMM        MMMMM=MMMMM            MMMM 
-MMMM.        =MMMMMMM:             MMMM 
-MMMMM          MMMMM              ,MMMM 
- MMMM            M                MMMM  
-  MMMM                           MMMM   
-  DMMMM                         MMMMD   
-   =MMMMM                     MMMMM=    
-     MMMMMM                 MMMMMM      
-      .MMMMMMMI         :MMMMMMM.       
-         MMMMMMMMMMMMMMMMMMMMM          
-            MMMMMMMMMMMMMMM             
-                . ?M?                 
+             MMMMMMMMMMMMMMM             
+          MMMMMMMMMMMMMMMM               
+       .MMMMMMMI        .                
+      MMMMMM                      ~MM    
+    =MMMMM                       MMMMM,  
+   DMMMM                       MMMMMM    
+   MMMM                       MMMMM      
+  MMMM                      MMMMMM       
+ MMMMM                    ~MMMMM         
+ MMMM                    MMMMMD          
+ MMMM      MMM         MMMMMM            
+ MMM~     MMMMM       MMMMM              
+ MMM~      MMMMMM   MMMMMM          =MMMI
+ MMMM        MMMMM=MMMMM            MMMM 
+ MMMM.        =MMMMMMM:             MMMM 
+ MMMMM          MMMMM              ,MMMM 
+  MMMM            M                MMMM  
+   MMMM                           MMMM   
+   DMMMM                         MMMMD   
+    =MMMMM                     MMMMM=    
+      MMMMMM                 MMMMMM      
+       .MMMMMMMI         :MMMMMMM.       
+          MMMMMMMMMMMMMMMMMMMMM          
+             MMMMMMMMMMMMMMM             
+                 . ?M?                 
 
-revoke // crl fetching and hosting simplified
+revoke // crl fetching and hosting made simple
 
 Automated installation and configuration:"
 }
