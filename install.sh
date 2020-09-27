@@ -333,6 +333,7 @@ main() {
 
     show_ascii_logo
     check_privilege
+    make_temporary_log
     check_os
 
     get_package_manager
