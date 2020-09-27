@@ -341,8 +341,11 @@ main() {
     get_IPv4_information
 
 
-    create_install_directory
-    create_db
+    create_install_directory # add to function install_revoke
+    create_db # add to function install_revoke
+
+    install_revoke | tee -a /proc/$$/fd/3
+    copy_to_install_log
 
 
 # Configure Apache HTTPD webserver
