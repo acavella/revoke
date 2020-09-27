@@ -283,7 +283,7 @@ get_package_manager() {
 
 make_temporary_log() {
     # Create a random temporary file for the log
-    TEMPLOG=$(mktemp /tmp/pihole_temp.XXXXXX)
+    TEMPLOG=$(mktemp /tmp/revoke_temp.XXXXXX)
     # Open handle 3 for templog
     # https://stackoverflow.com/questions/18460186/writing-outputs-to-log-file-and-console
     exec 3>"$TEMPLOG"
@@ -296,9 +296,8 @@ make_temporary_log() {
 copy_to_install_log() {
     # Copy the contents of file descriptor 3 into the install log
     # Since we use color codes such as '\e[1;33m', they should be removed
-    touch ${installLog}
-    sed 's/\[[0-9;]\{1,5\}m//g' < /proc/$$/fd/3 > "${installLog}"
-    chmod 644 "${installLog}"
+    sed 's/\[[0-9;]\{1,5\}m//g' < /proc/$$/fd/3 > "${INSTALL_LOG}"
+    chmod 644 "${INSTALL_LOG}"
 }
 
 install_dependencies() {
@@ -344,23 +343,6 @@ main() {
     create_install_directory
     create_db
 
- 
-# DEPENDENCY CHECK
-for i in "${REVOKE_DEPS[@]}"
-do
-    if is_command ${i}; then
-        echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] Dependency satisfied: ${i}" 2>&1 | tee -a $INSTALL_LOG
-    else
-        echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] Installing dependency: ${i}" 2>&1 | tee -a $INSTALL_LOG
-        ${PKG_MGR} install ${i} -y &> /dev/null
-        if [ $? = 0 ]
-        then
-            echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] Dependency installed: ${i}" 2>&1 | tee -a $INSTALL_LOG
-        else
-            echo "[$(date '+%Y-%m-%d %H:%M:%S')] [error] Unable to install dependency: ${i}" 2>&1 | tee -a $INSTALL_LOG
-        fi
-    fi
-done
 
 # Configure Apache HTTPD webserver
     # Install virtual host configuration
@@ -374,3 +356,5 @@ done
     enable_service httpd
     restart_service httpd
 }
+
+main
