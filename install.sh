@@ -34,7 +34,7 @@ INSTALL_CONFIG="${__conf}/install.conf"
 INSTALL_DIR="/usr/local/bin/revoke"
 DB_DIR="/usr/local/bin/revoke/db"
 WWW_DIR="/var/www/revoke"
-INSTALL_LOG="${INSTALL_DIR}/install.log"
+INSTALL_LOG="${INSTALL_DIR}/log/install.log"
 DTG_PRINT=$(date '+%Y-%m-%d %H:%M:%S')
 DTG_FILE=$(date '+%Y%m%d-%H%M%S')
 
@@ -172,7 +172,7 @@ create_install_directory() {
     local str="Creating installation directories"
     printf "  %b %s..." "${INFO}" "${str}"
     install -d -m 755 ${INSTALL_DIR}
-    mkdir -p ${INSTALL_DIR}/{conf,db}
+    mkdir -p ${INSTALL_DIR}/{log,db}
     printf "%b  %b %s...\\n" "${OVER}" "${TICK}" "${str}"
 }
 
@@ -328,6 +328,25 @@ get_user_details() {
     printf "%b  %b %s...\\n" "${OVER}" "${TICK}" "${str}"
 }
 
+install_revoke() {
+    # Revoke specific installation and creation of defaults
+    create_install_directory 
+    create_db 
+    # Configure Apache HTTPD webserver
+    # Install revoke virtual host configuration
+    {
+        echo "<VirtualHost ${IPADDR}:80>"
+        echo "ServerName "
+        echo "DocumentRoot \"${WWW_DIR}\""
+        echo "</VirtualHost>"
+    }>/etc/httpd/conf.d/revoke.conf
+
+    enable_service httpd # set httpd to start on reboot
+    restart_service httpd # initial httpd service start
+}
+
+}
+
 
 main() {
 
@@ -341,24 +360,10 @@ main() {
     get_IPv4_information
 
 
-    create_install_directory # add to function install_revoke
-    create_db # add to function install_revoke
-
     install_revoke | tee -a /proc/$$/fd/3
     copy_to_install_log
 
 
-# Configure Apache HTTPD webserver
-    # Install virtual host configuration
-    {
-        echo "<VirtualHost ${IPADDR}:80>"
-        echo "ServerName "
-        echo "DocumentRoot \"${WWW_DIR}\""
-        echo "</VirtualHost>"
-    }>/etc/httpd/conf.d/revoke.conf
 
-    enable_service httpd
-    restart_service httpd
-}
 
 main
