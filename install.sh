@@ -269,9 +269,11 @@ get_package_manager() {
     if [ "$detectedOS" = "Fedora" ] || [ "$detectedOS" = "CentOS" ]; then
         if is_command dnf ; then
             PKG_MGR="dnf" # set to dnf
+            SYSTEMD=1
             printf "  %b Package manager: %s\\n" "${TICK}" "${PKG_MGR}"
         elif is_command yum ; then
             PKG_MGR="yum" # set to yum
+            SYSTEMD=0
             printf "  %b Package manager: %s\\n" "${TICK}" "${PKG_MGR}"
         else
             # unable to detect a common yum based package manager
@@ -328,11 +330,11 @@ get_user_details() {
     printf "%b  %b %s...\\n" "${OVER}" "${TICK}" "${str}"
 }
 
-install_revoke() {
-    # Revoke specific installation and creation of defaults
-    create_install_directory 
-    create_db 
+install_httpd() {
+    # Local, named variables
+    local str="Installing Apache HTTP Server"
     # Configure Apache HTTPD webserver
+    printf "  %b %s..." "${INFO}" "${str}"
     # Install revoke virtual host configuration
     {
         echo "<VirtualHost ${IPADDR}:80>"
@@ -340,6 +342,18 @@ install_revoke() {
         echo "DocumentRoot \"${WWW_DIR}\""
         echo "</VirtualHost>"
     }>/etc/httpd/conf.d/revoke.conf
+    printf "%b  %b %s...\\n" "${OVER}" "${TICK}" "${str}"
+}
+
+install_revoke() {
+    # Revoke specific installation and creation of defaults
+    # Local, named variables
+    local str="Installing Revoke core components"
+    printf "  %b %s..." "${INFO}" "${str}"
+    create_install_directory 
+    create_db 
+    install_httpd
+    
 
     enable_service httpd # set httpd to start on reboot
     restart_service httpd # initial httpd service start
