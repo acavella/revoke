@@ -359,25 +359,16 @@ install_revoke() {
     restart_service httpd # initial httpd service start
 }
 
-}
-
-
 main() {
-
     show_ascii_logo
     check_privilege
     make_temporary_log
     check_os
-
     get_package_manager
     install_dependencies
     get_IPv4_information
-
-
     install_revoke | tee -a /proc/$$/fd/3
     copy_to_install_log
-
-
-
+}
 
 main
