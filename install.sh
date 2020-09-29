@@ -354,7 +354,7 @@ install_revoke() {
     create_db 
     install_httpd
     
-
+    # Enable/Start required services
     enable_service httpd # set httpd to start on reboot
     restart_service httpd # initial httpd service start
 }
