@@ -372,3 +372,4 @@ main() {
 }
 
 main
+exit 0 # exit cleanly upon completion
