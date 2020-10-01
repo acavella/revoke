@@ -373,7 +373,6 @@ main() {
 
 main
 printf "  %b Revoke has successfully been installed!" "${INFO}"
-printf "      Install log can be found here:\\n"
-printf "      ${INSTALL_LOG}\\n"
+printf "      Install log: ${INSTALL_LOG}\\n"
 printf "\\n"
 exit 0 # exit cleanly upon completion
