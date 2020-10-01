@@ -333,12 +333,13 @@ get_user_details() {
 install_httpd() {
     # Local, named variables
     local str="Installing Apache HTTP Server"
+    local srvname="$(hostname)"
     # Configure Apache HTTPD webserver
     printf "  %b %s..." "${INFO}" "${str}"
     # Install revoke virtual host configuration
     {
         echo "<VirtualHost ${IPADDR}:80>"
-        echo "ServerName "
+        echo "ServerName ${srvname}"
         echo "DocumentRoot \"${WWW_DIR}\""
         echo "</VirtualHost>"
     }>/etc/httpd/conf.d/revoke.conf
@@ -349,7 +350,7 @@ install_revoke() {
     # Revoke specific installation and creation of defaults
     # Local, named variables
     local str="Installing Revoke core components"
-    printf "  %b %s..." "${INFO}" "${str}"
+    printf "  %b %s...\\n" "${INFO}" "${str}"
     create_install_directory 
     create_db 
     install_httpd
@@ -357,6 +358,7 @@ install_revoke() {
     # Enable/Start required services
     enable_service httpd # set httpd to start on reboot
     restart_service httpd # initial httpd service start
+    
 }
 
 main() {
@@ -372,7 +374,8 @@ main() {
 }
 
 main
-printf "  %b Revoke has successfully been installed!" "${INFO}"
+printf "  %b Revoke has successfully been installed!\\n" "${INFO}"
 printf "      Install log: ${INSTALL_LOG}\\n"
+printf "      Install dir: ${INSTALL_DIR}\\n"
 printf "\\n"
 exit 0 # exit cleanly upon completion
