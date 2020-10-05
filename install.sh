@@ -34,6 +34,7 @@ INSTALL_CONFIG="${__conf}/install.conf"
 INSTALL_DIR="/usr/local/bin/revoke"
 DB_DIR="/usr/local/bin/revoke/db"
 WWW_DIR="/var/www/revoke"
+WWW_CONF="/etc/httpd/conf.d/revoke.conf"
 INSTALL_LOG="${INSTALL_DIR}/log/install.log"
 DTG_PRINT=$(date '+%Y-%m-%d %H:%M:%S')
 DTG_FILE=$(date '+%Y%m%d-%H%M%S')
@@ -342,7 +343,7 @@ install_httpd() {
         echo "ServerName ${srvname}"
         echo "DocumentRoot \"${WWW_DIR}\""
         echo "</VirtualHost>"
-    }>/etc/httpd/conf.d/revoke.conf
+    }>${WWW_CONF}
     printf "%b  %b %s...\\n" "${OVER}" "${TICK}" "${str}"
 }
 
@@ -377,5 +378,9 @@ main
 printf "  %b Revoke has successfully been installed!\\n" "${INFO}"
 printf "      Install log: ${INSTALL_LOG}\\n"
 printf "      Install dir: ${INSTALL_DIR}\\n"
+printf "\\n"
+printf "      The Apache Virtual Host can be customized\\n"
+printf "      to meet your environment needs.\\n"
+printf "      HTTP config: ${WWW_CONF}\\n"
 printf "\\n"
 exit 0 # exit cleanly upon completion
