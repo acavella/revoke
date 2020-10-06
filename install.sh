@@ -174,6 +174,8 @@ create_install_directory() {
     printf "  %b %s..." "${INFO}" "${str}"
     install -d -m 755 ${INSTALL_DIR}
     mkdir -p ${INSTALL_DIR}/{log,db}
+    touch ${INSTALL_DIR}/log/error.log
+    touch ${INSTALL_DIR}/log/access.log
     printf "%b  %b %s...\\n" "${OVER}" "${TICK}" "${str}"
 }
 
@@ -343,7 +345,7 @@ install_httpd() {
         echo "ServerName ${srvname}"
         echo "DocumentRoot \"${WWW_DIR}\""
         echo "ErrorLog ${INSTALL_DIR}/log/error.log"
-        echo "CustomLog ${INSTALL_DIR}/log/requests.log combined"
+        echo "CustomLog ${INSTALL_DIR}/log/access.log combined"
         echo "</VirtualHost>"
     }>${WWW_CONF}
     printf "%b  %b %s...\\n" "${OVER}" "${TICK}" "${str}"
