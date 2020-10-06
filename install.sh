@@ -342,6 +342,8 @@ install_httpd() {
         echo "<VirtualHost ${IPADDR}:80>"
         echo "ServerName ${srvname}"
         echo "DocumentRoot \"${WWW_DIR}\""
+        echo "ErrorLog ${INSTALL_DIR}/log/error.log"
+        echo "CustomLog ${INSTALL_DIR}/log/requests.log combined"
         echo "</VirtualHost>"
     }>${WWW_CONF}
     printf "%b  %b %s...\\n" "${OVER}" "${TICK}" "${str}"
