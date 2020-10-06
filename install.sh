@@ -363,7 +363,14 @@ install_revoke() {
     # Enable/Start required services
     enable_service httpd # set httpd to start on reboot
     restart_service httpd # initial httpd service start
-    
+    printf "  %b Revoke has successfully been installed!\\n" "${INFO}"
+    printf "      Install log: ${INSTALL_LOG}\\n"
+    printf "      Install dir: ${INSTALL_DIR}\\n"
+    printf "\\n"
+    printf "      The Apache Virtual Host can be customized\\n"
+    printf "      to meet your environment needs.\\n"
+    printf "      HTTP config: ${WWW_CONF}\\n"
+    printf "\\n"
 }
 
 main() {
@@ -379,12 +386,5 @@ main() {
 }
 
 main
-printf "  %b Revoke has successfully been installed!\\n" "${INFO}"
-printf "      Install log: ${INSTALL_LOG}\\n"
-printf "      Install dir: ${INSTALL_DIR}\\n"
-printf "\\n"
-printf "      The Apache Virtual Host can be customized\\n"
-printf "      to meet your environment needs.\\n"
-printf "      HTTP config: ${WWW_CONF}\\n"
-printf "\\n"
+
 exit 0 # exit cleanly upon completion
