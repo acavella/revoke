@@ -123,10 +123,10 @@ validateConn () {
   fi
 }
 
-if [ "${1}" == "--help" ] || [ "${1}" == "-h" ]
+if [ "${1}" == "help" ]
 then
   showHelp
-elif [ "${1}" == "--version"] || ["${1}" == "-V" ]
+elif [ "${1}" == "version"]
 then
   showVer
 else
