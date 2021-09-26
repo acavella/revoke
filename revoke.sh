@@ -19,7 +19,6 @@ __db="${__dir}/db/revoke.db"
 __www="/var/www/revoke"
 
 ver=$(<VERSION)
-lighttpdVer=$(lighttpd -v | awk '{print $2;}')
 opensslVer=$(openssl version | awk '{print $2;}')
 
 confFile="${__conf}/revoke.conf"
@@ -32,7 +31,6 @@ defGW=$(/usr/sbin/ip route show default | awk '/default/ {print $3}')
 # FUNCTIONS
 showVer () {
   echo "[$(date '+%Y-%m-%d %H:%M:%S')] [version] revoke: ${ver}" 2>&1 | tee -a $logFile
-  echo "[$(date '+%Y-%m-%d %H:%M:%S')] [version] lighttpd: ${lighttpdVer}" 2>&1 | tee -a $logFile
   echo "[$(date '+%Y-%m-%d %H:%M:%S')] [version] revoke: ${opensslVer}" 2>&1 | tee -a $logFile
 }
 
@@ -126,9 +124,11 @@ validateConn () {
 if [ "${1}" == "help" ]
 then
   showHelp
+  exit 0
 elif [ "${1}" == "version"]
 then
   showVer
+  exit 0
 else
   :
 fi
