@@ -75,6 +75,7 @@ addCrl () {
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] Valid CRL found and added." 2>&1 | tee -a $logFile
     shaHash=$(sha1sum ${__www}/${crlName}/${crlName}.crl)  # Get initial CRL hash
     sqlite3 ${__db} "INSERT INTO crlList VALUES(NULL,'${crlUri}','${crlName}','${shaHash}','${crlDTG}');" # Add crlHash
+  fi
 }
 
 showCrl () {
@@ -125,7 +126,7 @@ if [ "${1}" == "help" ]
 then
   showHelp
   exit 0
-elif [ "${1}" == "version"]
+elif [ "${1}" == "version" ]
 then
   showVer
   exit 0
