@@ -10,7 +10,7 @@ USER root
 RUN apk udpate \
     && apk add lighttpd \
     && apk add git \
-    && apk add sqlite3 \
+    && apk add sqlite \
     && rm -rf /var/cache/apk/*
 
 CMD ["lighttpd", "-D", "-f", "/etc/lighttpd/lighttpd.conf"]
