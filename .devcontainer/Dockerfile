@@ -1,6 +1,6 @@
 FROM alpine:latest
 
-RUN apk udpate \
+RUN apk update \
     && apk add lighttpd \
     && apk add git \
     && apk add sqlite3 \
