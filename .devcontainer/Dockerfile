@@ -7,10 +7,10 @@ FROM mcr.microsoft.com/vscode/devcontainers/base:0-alpine-${VARIANT}
 USER root
 
 # ** [Optional] Uncomment this section to install additional packages. **
-RUN apk udpate \
-    && apk add lighttpd \
-    && apk add git \
-    && apk add sqlite \
-    && rm -rf /var/cache/apk/*
+#RUN apk udpate \
+#    && apk add lighttpd \
+#    && apk add git \
+#    && apk add sqlite \
+#    && rm -rf /var/cache/apk/*
 
 CMD ["lighttpd", "-D", "-f", "/etc/lighttpd/lighttpd.conf"]
