@@ -95,13 +95,3 @@ make_temporary_log
 main | tee -a /proc/$$/fd/3
 copy_to_run_log
 exit 0
-
-## CHECK AND LOAD EXTERNAL CONFIG
-if [ ! -e $config ]
-then
-  echo "[$(date '+%Y-%m-%d %H:%M:%S')] [error] (64) Configuration file missing, please run setup.sh" >> $logFile
-  exit 64
-else
-  source $config
-  echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] (00) Configuration file loaded sucessfully, $config" >> $logFile
-fi
