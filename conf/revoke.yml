@@ -2,7 +2,6 @@
 default:
   gateway: google.com
   www: /var/www/revoke/
-  tmpDir: /tmp/
 
 ca:
   - id: x11
