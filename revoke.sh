@@ -45,13 +45,18 @@ copy_to_run_log() {
     chmod 644 "${log}"
 }
 
-check_config(){
+check_config() {
   if [ ! -e $config ]
   then
     printf "$(date '+%Y-%m-%dT%H:%M:%S') [error] unable to locate configuration ${config}\n"
     exit 1
   fi
 }
+
+check_network() {
+  commands
+}
+
 
 fix_permissions() {
   printf "$(date '+%Y-%m-%dT%H:%M:%S') [info] fixing permissions on ${wwwdir}\n"
@@ -76,6 +81,12 @@ download_crl() {
     if [ ! -s ${tempfile} ]
     then
       printf "$(date '+%Y-%m-%dT%H:%M:%S') [error] download failed ${crlID} zero byte file ${tempfile}\n"
+      exit 1
+    fi
+    openssl crl -inform DER -text -noout -in ${tempfile} | grep 'Certificate Revocation List' &> /dev/null
+    if [ $? == 1 ]
+    then
+      printf "$(date '+%Y-%m-%dT%H:%M:%S') [error] download failed ${crlID} invalid crl ${tempfile}\n"
       exit 1
     fi
     printf "$(date '+%Y-%m-%dT%H:%M:%S') [info] copying ${tempfile} to ${wwwdir}/${crlID}.crl\n"
