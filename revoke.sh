@@ -16,10 +16,10 @@ ver=$(<VERSION)
 
 baseDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 fileDTG=$(date '+%Y%m%d-%H%M%S')
-config="$baseDir/conf/revoke.yml"
+config="${baseDir}/conf/revoke.yml"
 log="${baseDir}/logs/revoke_${fileDTG}.log"
-wwwdir=$(yq -r .default.www ${config})
-arraySize=$(yq '.ca | length' ${config})
+wwwdir=$(./lib/yq4 -r .default.www ${config})
+arraySize=$(./lib/yq4 '.ca | length' ${config})
 defGW=$(/usr/sbin/ip route show default | /usr/bin/awk '/default/ {print $3}')
 
 ## FUNCTIONS
@@ -68,8 +68,8 @@ download_crl() {
   local counterA=0
   while [ ${counterA} -lt ${arraySize} ]
   do
-    local crlSource=$(yq -r .ca[${counterA}].uri ${config})
-    local crlID=$(yq -r .ca[${counterA}].id ${config})
+    local crlSource=$(./lib/yq4 -r .ca[${counterA}].uri ${config})
+    local crlID=$(./lib/yq4 -r .ca[${counterA}].id ${config})
     local tempfile=$(mktemp)
     printf "$(date '+%Y-%m-%dT%H:%M:%S') [info] downloading ${crlID} source ${crlSource}\n"
     curl -k -s ${crlSource} > ${tempfile} ${crlID}
