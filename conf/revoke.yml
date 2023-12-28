@@ -1,0 +1,12 @@
+---
+default:
+  gateway: google.com
+  wwwDir: /var/www/revoke/
+  tmpDir: /tmp/
+
+ca:
+  - id: x11
+    uri: https://ca.example.com/x11
+  - id: x21
+    uri: https://ca.example.com/x21
+    
