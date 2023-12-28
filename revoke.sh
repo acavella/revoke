@@ -15,12 +15,12 @@ set -o nounset
 ver=$(<VERSION)
 
 baseDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-fileDTG=$(date '+%Y%m%d-%H%M%S')
+dtg=$(date '+%Y%m%d-%H%M%S')
 config="${baseDir}/conf/revoke.yml"
-log="${baseDir}/logs/revoke_${fileDTG}.log"
+log="${baseDir}/logs/revoke_${dtg}.log"
 wwwdir=$(./lib/yq4 -r .default.www ${config})
 arraySize=$(./lib/yq4 '.ca | length' ${config})
-defGW=$(./lib/yq4 -r .default.gateway ${config})
+defgw=$(./lib/yq4 -r .default.gateway ${config})
 
 ## FUNCTIONS
 
@@ -54,7 +54,7 @@ check_config() {
 }
 
 check_network() {
-  ping -c 1 $defGW >/dev/null 2>&1;
+  ping -c 1 $defgw >/dev/null 2>&1;
   pingExit=$?
   if [ $pingExit -eq 0 ]
   then
