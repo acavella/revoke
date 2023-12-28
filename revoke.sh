@@ -20,7 +20,7 @@ config="${baseDir}/conf/revoke.yml"
 log="${baseDir}/logs/revoke_${fileDTG}.log"
 wwwdir=$(./lib/yq4 -r .default.www ${config})
 arraySize=$(./lib/yq4 '.ca | length' ${config})
-defGW=$(/usr/sbin/ip route show default | /usr/bin/awk '/default/ {print $3}')
+defGW=$(./lib/yq4 -r .default.gateway ${config})
 
 ## FUNCTIONS
 
@@ -54,7 +54,15 @@ check_config() {
 }
 
 check_network() {
-  commands
+  ping -c 1 $defGW >/dev/null 2>&1;
+  pingExit=$?
+  if [ $pingExit -eq 0 ]
+  then
+    printf "$(date '+%Y-%m-%dT%H:%M:%S') [info] received ping response from ${defgw}\n"
+  else
+    printf "$(date '+%Y-%m-%dT%H:%M:%S') [error] ping response not received from ${defgw}\n"
+    exit 1
+  fi
 }
 
 
@@ -98,6 +106,7 @@ download_crl() {
 main() {
   show_version
   check_config
+  check_network
   download_crl
   fix_permissions
 }
