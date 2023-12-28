@@ -50,6 +50,16 @@ get_array_size() {
   arraySize=$(yq '.ca | length' ${confFile})
 }
 
+download_crl() {
+  local counter=0
+  while [ ${counter} -lt ${arraySize} ]
+  do
+    increment counter
+    commands
+    commands
+  done
+}
+
 main() {
     show_version
     get_cacerts
