@@ -3,7 +3,7 @@
 # NAME: revoke.sh
 # DECRIPTION: Perform downloads of remote CRL data and host them locally via HTTPD.
 # AUTHOR: Tony Cavella (tony@cavella.com)
-# SOURCE: https://github.com/altCipher/revoke
+# SOURCE: https://github.com/acavella/revoke
 
 ## CONFIGURE DEFAULT ENVIRONMENT
 set -o errexit
@@ -12,20 +12,53 @@ set -o nounset
 #set -o xtrace
 
 ## VARIABLES
-__dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-__bin="${__dir}/bin"
-__conf="${__dir}/conf"
-
 ver=$(<VERSION)
 
 scriptName=$0
 baseDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-confFile="$baseDIR""/conf/revoke.conf"
-logFile="/var/log/revoke.log"
-counterA=0
 timeDate=$(date '+%Y-%m-%d %H:%M:%S')
 fileDTG=$(date '+%Y%m%d-%H%M%S')
+confFile="$baseDIR/conf/revoke.yml"
+log="${baseDIR}/logs/revoke_${fileDTG}.log"
+counterA=0
 defGW=$(/usr/sbin/ip route show default | /usr/bin/awk '/default/ {print $3}')
+
+## FUNCTIONS
+
+show_version() {
+    printf "$(date '+%Y-%m-%dT%H:%M:%S') [info] Revoke version: ${VERSION}\n"
+    printf "$(date '+%Y-%m-%dT%H:%M:%S') [info] Bash version: ${BASH_VERSION}\n"
+    printf "$(date '+%Y-%m-%dT%H:%M:%S') [info] Operating system: ${DETECTED_OS}\n"
+}
+
+make_temporary_log() {
+    # Create a random temporary file for the log
+    TEMPLOG=$(mktemp /tmp/revoke_temp.XXXXXX)
+    # Open handle 3 for templog
+    # https://stackoverflow.com/questions/18460186/writing-outputs-to-log-file-and-console
+    exec 3>${TEMPLOG}
+    # Delete templog, but allow for addressing via file handle
+    # This lets us write to the log without having a temporary file on the drive, which
+    # is meant to be a security measure so there is not a lingering file on the drive during the install process
+    rm ${TEMPLOG}
+}
+
+copy_to_run_log() {
+    # Copy the contents of file descriptor 3 into the log
+    cat /proc/$$/fd/3 > "${log}"
+    chmod 644 "${log}"
+}
+
+main() {
+    show_version
+    get_cacerts
+    extract_pkcs12
+    reenroll
+}
+
+make_temporary_log
+main | tee -a /proc/$$/fd/3
+copy_to_run_log
 
 # SCRIPT STARTUP
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] (00) revoke v$ver started" >> $logFile

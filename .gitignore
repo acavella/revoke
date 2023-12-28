@@ -11,7 +11,7 @@
 .nfs*
 
 # Script used to test random scraps of code
-/test/test.sh
+/logs/*.log
 
 # GitHub Probot configurations
 /.github/config.yml
