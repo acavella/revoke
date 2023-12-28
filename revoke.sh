@@ -49,6 +49,10 @@ copy_to_run_log() {
     chmod 644 "${log}"
 }
 
+get_array_size() {
+  arraySize=$(yq '.ca | length' ${confFile})
+}
+
 main() {
     show_version
     get_cacerts
