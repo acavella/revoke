@@ -14,19 +14,18 @@ set -o nounset
 ## VARIABLES
 ver=$(<VERSION)
 
-scriptName=$0
-baseDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-timeDate=$(date '+%Y-%m-%d %H:%M:%S')
+baseDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 fileDTG=$(date '+%Y%m%d-%H%M%S')
-confFile="$baseDIR/conf/revoke.yml"
-log="${baseDIR}/logs/revoke_${fileDTG}.log"
-counterA=0
+config="$baseDir/conf/revoke.yml"
+log="${baseDir}/logs/revoke_${fileDTG}.log"
+wwwdir=$(yq -r .default.www ${config})
+arraySize=$(yq '.ca | length' ${config})
 defGW=$(/usr/sbin/ip route show default | /usr/bin/awk '/default/ {print $3}')
 
 ## FUNCTIONS
 
 show_version() {
-    printf "$(date '+%Y-%m-%dT%H:%M:%S') [info] Revoke version: ${VERSION}\n"
+    printf "$(date '+%Y-%m-%dT%H:%M:%S') [info] Revoke version: ${ver}\n"
     printf "$(date '+%Y-%m-%dT%H:%M:%S') [info] Bash version: ${BASH_VERSION}\n"
     printf "$(date '+%Y-%m-%dT%H:%M:%S') [info] Operating system: ${DETECTED_OS}\n"
 }
@@ -46,75 +45,63 @@ copy_to_run_log() {
     chmod 644 "${log}"
 }
 
-get_array_size() {
-  arraySize=$(yq '.ca | length' ${confFile})
+check_config(){
+  if [ ! -e $config ]
+  then
+    printf "$(date '+%Y-%m-%dT%H:%M:%S') [error] unable to locate configuration ${config}\n"
+    exit 1
+  fi
+}
+
+fix_permissions() {
+  printf "$(date '+%Y-%m-%dT%H:%M:%S') [info] fixing permissions on ${wwwdir}\n"
+  chown apache:apache ${wwwdir} -R
+  restorecon -r ${wwwdir}
 }
 
 download_crl() {
-  local counter=0
-  while [ ${counter} -lt ${arraySize} ]
+  local counterA=0
+  while [ ${counterA} -lt ${arraySize} ]
   do
-    increment counter
-    commands
-    commands
+    local crlSource=$(yq -r .ca[${counterA}].uri ${config})
+    local crlID=$(yq -r .ca[${counterA}].id ${config})
+    local tempfile=$(mktemp)
+    printf "$(date '+%Y-%m-%dT%H:%M:%S') [info] downloading ${crlID} source ${crlSource}\n"
+    curl -k -s ${crlSource} > ${tempfile} ${crlID}
+    if [ ! -e ${tempfile} ]
+    then
+      printf "$(date '+%Y-%m-%dT%H:%M:%S') [error] download failed ${crlID} missing ${tempfile}\n"
+      exit 1
+    fi
+    if [ ! -s ${tempfile} ]
+    then
+      printf "$(date '+%Y-%m-%dT%H:%M:%S') [error] download failed ${crlID} zero byte file ${tempfile}\n"
+      exit 1
+    fi
+    printf "$(date '+%Y-%m-%dT%H:%M:%S') [info] copying ${tempfile} to ${wwwdir}/${crlID}.crl\n"
+    mv ${tempfile} ${wwwdir}/${crlID}.crl
+    let counterA=counterA+1
   done
 }
 
 main() {
-    show_version
-    get_cacerts
-    extract_pkcs12
-    reenroll
+  show_version
+  check_config
+  download_crl
+  fix_permissions
 }
 
 make_temporary_log
 main | tee -a /proc/$$/fd/3
 copy_to_run_log
-
-# SCRIPT STARTUP
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] (00) revoke v$ver started" >> $logFile
-
+exit 0
 
 ## CHECK AND LOAD EXTERNAL CONFIG
-if [ ! -e $confFile ]
+if [ ! -e $config ]
 then
   echo "[$(date '+%Y-%m-%d %H:%M:%S')] [error] (64) Configuration file missing, please run setup.sh" >> $logFile
   exit 64
 else
-  source $confFile
-  echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] (00) Configuration file loaded sucessfully, $confFile" >> $logFile
+  source $config
+  echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] (00) Configuration file loaded sucessfully, $config" >> $logFile
 fi
-
-
-## CHECK FOR NETWORK CONNECTIVTY
-ping -c 1 $defGW >/dev/null 2>&1;
-pingExit=$?
-if [ $pingExit -eq 0 ]
-then
-   echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] (00) Default gateway available, $defGW" >> $logFile
-else
-  echo "[$(date '+%Y-%m-%d %H:%M:%S')] [error] (64) Default gateway is unreachable, $defGW" >> $logFile
-  exit 64
-fi
-
-
-# DOWNLOAD CRL(s)
-for i in "${crlURL[@]}"
-do
-  curl -k -s $i > $downloadDIR${crlName[$counterA]}
-  if [ ! -e $downloadDIR${crlName[$counterA]} ]
-  then
-    echo "[$(date '+%Y-%m-%d %H:%M:%S')] [error] (64) crl download failed, $i" >> $logFile
-  else 
-    if [ -s $downloadDIR${crlName[$counterA]} ]
-    then
-      echo "[$(date '+%Y-%m-%d %H:%M:%S')] [info] (00) crl download sucessful, $i" >> $logFile
-      mv $downloadDIR${crlName[$counterA]} $publicWWW
-    else
-      echo "[$(date '+%Y-%m-%d %H:%M:%S')] [error] (64) crl download failed (zero-byte file), $i" >> $logFile
-    fi
-  fi
-let counterA=counterA+1
-done
-
-exit 0

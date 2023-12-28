@@ -1,7 +1,7 @@
 ---
 default:
   gateway: google.com
-  wwwDir: /var/www/revoke/
+  www: /var/www/revoke/
   tmpDir: /tmp/
 
 ca:
