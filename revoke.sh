@@ -27,7 +27,6 @@ defgw=$(./lib/yq4 -r .default.gateway ${config})
 show_version() {
     printf "$(date '+%Y-%m-%dT%H:%M:%S') [info] Revoke version: ${ver}\n"
     printf "$(date '+%Y-%m-%dT%H:%M:%S') [info] Bash version: ${BASH_VERSION}\n"
-    printf "$(date '+%Y-%m-%dT%H:%M:%S') [info] Operating system: ${DETECTED_OS}\n"
 }
 
 make_temporary_log() {
@@ -91,7 +90,7 @@ download_crl() {
       printf "$(date '+%Y-%m-%dT%H:%M:%S') [error] download failed ${crlID} zero byte file ${tempfile}\n"
       exit 1
     fi
-    openssl crl -inform DER -text -noout -in ${tempfile} | grep 'Certificate Revocation List' &> /dev/null
+    /usr/bin/openssl crl -inform DER -text -noout -in ${tempfile} | grep 'Certificate Revocation List' &> /dev/null
     if [ $? == 1 ]
     then
       printf "$(date '+%Y-%m-%dT%H:%M:%S') [error] download failed ${crlID} invalid crl ${tempfile}\n"
